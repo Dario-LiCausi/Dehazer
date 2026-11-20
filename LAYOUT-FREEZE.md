@@ -1,0 +1,19 @@
+# Layout freeze
+
+Many users need the app to stay the same. This file protects that.
+
+## Frozen (do not change without the steps below)
+- The position of every button, box and link.
+- The default colours and the default theme.
+- The default motion setting (off).
+- The order of items in a list. The app never re-sorts.
+- The text of the main buttons.
+
+## Steps for a frozen change
+1. Open an issue with the label `nd-review`. Say what moves and why.
+2. Publish the change in the release notes **before** it ships.
+3. Get at least 1 `nd-review` pass from a neurodivergent reviewer.
+4. Offer a setting to keep the old layout for one release.
+
+## Not frozen
+Bug fixes that change no position, colour or motion. Fresh mode may change colours and icons, never positions.
