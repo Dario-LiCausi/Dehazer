@@ -15,6 +15,6 @@ We want this to be a calm, safe place for everyone, including neurodivergent peo
 - Make health claims or promise cures.
 
 ## Enforcement
-Maintainers may edit or remove comments and may block people who break these rules. Report a problem by opening a private security advisory or contacting a maintainer through GitHub.
+Maintainers may edit or remove comments and may block people who break these rules. Report a problem privately with GitHub "Report content" or by messaging a maintainer on GitHub. If the report is about a maintainer, message a different maintainer. If there is only one, use GitHub "Report content" to GitHub Support. Do not post reports in public issues. Security advisories are for security bugs only.
 
 Adapted in spirit from the Contributor Covenant 2.1.

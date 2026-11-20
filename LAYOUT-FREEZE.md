@@ -14,6 +14,9 @@ Many users need the app to stay the same. This file protects that.
 2. Publish the change in the release notes **before** it ships.
 3. Get at least 1 `nd-review` pass from a neurodivergent reviewer.
 4. Offer a setting to keep the old layout for one release.
+5. Exception: an urgent accessibility fix may ship at once. Publish the notes the same day and run `nd-review` after. Do not keep an inaccessible layout.
+
+`nd-review` is voluntary. Reviewers need not share a diagnosis. Say only what you saw.
 
 ## Not frozen
-Bug fixes that change no position, colour or motion. Fresh mode may change colours and icons, never positions.
+Bug fixes that change no position, colour or motion. Fresh mode is opt-in. It may change colours and icons, never positions. Its changes also need release notes.

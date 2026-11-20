@@ -5,7 +5,7 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 **Status: early. Design only. No app yet.** See [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Three promises
-1. No account, no server, no tracking. Your data stays on your device.
+1. No account, no app backend, no tracking. Your data stays on your device.
 2. Nothing moves, flashes or shames. The layout is the same every day.
 3. Your data is yours. One tap exports plain Markdown.
 
