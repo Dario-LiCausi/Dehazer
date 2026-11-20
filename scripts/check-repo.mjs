@@ -2,7 +2,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 const required = ['LICENSE', 'README.md', 'MODUS_OPERANDI.md', 'LAYOUT-FREEZE.md',
-  'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'docs/DESIGN.md'];
+  'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'docs/DESIGN.md', 'docs/RESEARCH.md'];
 let bad = 0;
 for (const f of required) {
   if (!existsSync(f)) { console.error(`MISSING: ${f}`); bad++; }

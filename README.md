@@ -18,6 +18,7 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 - Rules for everyone: [MODUS_OPERANDI.md](MODUS_OPERANDI.md)
 - How to help (code and non-code): [CONTRIBUTING.md](CONTRIBUTING.md)
 - Layout and motion rules: [LAYOUT-FREEZE.md](LAYOUT-FREEZE.md)
+- Research behind the design: [docs/RESEARCH.md](docs/RESEARCH.md)
 
 ## Licence
 MIT. See [LICENSE](LICENSE).

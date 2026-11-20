@@ -8,6 +8,7 @@ Many users need the app to stay the same. This file protects that.
 - The default motion setting (off).
 - The order of items in a list. The app never re-sorts.
 - The text of the main buttons.
+- The "What changed" screen: it must appear before any visible change ships.
 
 ## Steps for a frozen change
 1. Open an issue with the label `nd-review`. Say what moves and why.
