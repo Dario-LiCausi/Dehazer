@@ -51,7 +51,7 @@ One column. Same place for everything. No hidden menus. No badges. No counts of 
 
 ## 7. Architecture
 - Plain HTML, CSS and JS (ES modules). No framework in v0.1.
-- Storage: IndexedDB through one small module (`store.js`). Ask for persistent storage (`navigator.storage.persist()`) [G: not all browsers grant it].
+- Storage: IndexedDB through one small module (`store.js`). Ask for persistent storage (`navigator.storage.persist()`) (not all browsers grant it).
 - Service worker caches the app shell. Web manifest for install.
 - Static hosting only (GitHub Pages). Anyone can fork and host.
 - Markdown format: one item per line, `- [ ] text` and `- [x] text`, optional `<!-- id -->`. Import must round-trip export.
@@ -78,7 +78,7 @@ Target WCAG 2.2 AA. Full keyboard use. Visible focus. Labels for screen readers.
 - `LAYOUT-FREEZE.md`: no change to positions, colours or motion without release notes shown before the change and an `nd-review` pass.
 - Labels: `good first issue`, `nd-review`, `design`, `docs`, `translation`.
 - CI from day one: lint, unit tests, axe check.
-- Governance: the project lead leads design and ND review. **Find one co-maintainer who codes before inviting many contributors** (skeptic point in the brief).
+- Governance: the project lead leads design and ND review. **Find one co-maintainer who codes before inviting many contributors**.
 - Channels after v0.1 works: Show HN, ND communities (listen first, no spam), GitHub topics, awesome lists.
 
 ## 11. Milestones (part-time, all effort figures are guesses)
