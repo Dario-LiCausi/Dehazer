@@ -17,6 +17,18 @@
     </form>
     <p id="status" role="status" aria-live="polite"></p>
     <p id="notice" hidden></p>
+    <section aria-labelledby="next-h">
+      <h2 id="next-h">Next 5</h2>
+      <ol id="next5"></ol>
+      <p id="next-empty" hidden>Nothing waiting. Capture a thought above.</p>
+    </section>
+    <div id="tools">
+      <button type="button" id="export">Export</button>
+      <label for="import">Import a Markdown file</label>
+      <input id="import" type="file" accept=".md,text/markdown,text/plain">
+    </div>
+    <p id="backup" hidden>It has been a while. You can save a copy with Export.</p>
+    <h2>All items</h2>
     <ul id="items" aria-label="Your items"></ul>
     <p id="empty">Nothing here yet.</p>
   </main>

@@ -4,17 +4,28 @@
 
 export const STATES = ['active', 'later', 'done'];
 export const MAX_TEXT = 2000;
+export const NEXT_COUNT = 5;
+
+// Next 5: the first five active items in the order they were added. Pure: no re-sorting, no scoring.
+export function nextFive(items) {
+  return items.filter((i) => i.state === 'active').slice(0, NEXT_COUNT);
+}
 
 export function createStore(backend, opts = {}) {
   const now = opts.now ?? (() => Date.now());
   const newId = opts.newId ?? (() => globalThis.crypto.randomUUID());
+
+  // Writes that pick a new pos run one after another, so fast saves keep their order.
+  let chain = Promise.resolve();
+  const serial = (fn) => { const run = chain.then(fn); chain = run.catch(() => {}); return run; };
 
   async function list() {
     const items = await backend.getAll();
     return items.sort((a, b) => a.pos - b.pos);
   }
 
-  async function add(text) {
+  function add(text) { return serial(() => addNow(text)); }
+  async function addNow(text) {
     const clean = String(text ?? '').trim().slice(0, MAX_TEXT);
     if (!clean) return null; // Empty capture is ignored, never an error.
     const items = await backend.getAll();
@@ -49,7 +60,26 @@ export function createStore(backend, opts = {}) {
     return item;
   }
 
-  return { list, add, setState, remove, restore };
+  // importItems adds parsed lines ({id, text, state}) at the end, in file order.
+  // An id that already exists is skipped, so importing the same file twice adds nothing.
+  function importItems(parsed) { return serial(() => importNow(parsed)); }
+  async function importNow(parsed) {
+    const have = new Set((await backend.getAll()).map((i) => i.id));
+    let pos = (await backend.getAll()).reduce((m, i) => Math.max(m, i.pos), 0);
+    let added = 0; let skipped = 0;
+    for (const p of parsed) {
+      const text = String(p.text ?? '').trim().slice(0, MAX_TEXT);
+      if (!text || !STATES.includes(p.state) || (p.id && have.has(p.id))) { skipped++; continue; }
+      const t = now();
+      const id = p.id || newId();
+      have.add(id);
+      await backend.put({ id, text, state: p.state, pos: ++pos, created: t, updated: t });
+      added++;
+    }
+    return { added, skipped };
+  }
+
+  return { list, add, setState, remove, restore, importItems };
 }
 
 // Backend for tests and for browsers without IndexedDB (data is lost on reload).

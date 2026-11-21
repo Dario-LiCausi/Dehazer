@@ -24,3 +24,10 @@ li[data-state="done"] .text { text-decoration: line-through; color: var(--muted)
 li[data-state="later"] .text { color: var(--muted); }
 .actions { display: flex; gap: .5rem; flex-wrap: wrap; }
 #status, #notice, #empty { color: var(--muted); min-height: 1.6em; }
+h2 { font-size: 1.25rem; margin: 1.5rem 0 .5rem; }
+ol#next5 { list-style: none; padding: 0; margin: 0; }
+#next5 li { display: block; padding: .5rem 0; border-bottom: 1px solid var(--line); }
+#next5 li.now { font-weight: 600; }
+#next5 li.soon { color: var(--muted); }
+#tools { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-top: 1rem; }
+#backup { color: var(--muted); }

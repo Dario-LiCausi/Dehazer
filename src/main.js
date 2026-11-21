@@ -10,4 +10,12 @@ if (!hasIdb) {
   n.textContent = MSG.storageFallback; n.hidden = false;
 }
 askPersist();
-mount(document, store);
+mount(document, store, {
+  storage: (() => { try { return window.localStorage; } catch { return undefined; } })(),
+  download(name, text) {
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/markdown' }));
+    const a = Object.assign(document.createElement('a'), { href: url, download: name });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  },
+});

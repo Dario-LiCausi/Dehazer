@@ -22,3 +22,12 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 
 ## Licence
 MIT. See [LICENSE](LICENSE).
+
+## Export and import format
+Export writes plain Markdown, one item per line:
+
+    - [ ] buy bread <!-- id -->
+    - [ ] call back <!-- id later -->
+    - [x] book dentist <!-- id -->
+
+The first lines hold `<!-- dehazer-export v1 -->`. Import reads ids only from files that carry it, so importing the same backup twice adds nothing. Any other Markdown checklist imports as new items. Line breaks in an item become spaces.
