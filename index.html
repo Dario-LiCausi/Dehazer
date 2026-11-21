@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dehazer</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="src/app.css">
+</head>
+<body>
+  <main>
+    <h1>Dehazer</h1>
+    <form id="capture" autocomplete="off">
+      <label for="text">Capture a thought</label>
+      <input id="text" name="text" type="text" maxlength="2000" placeholder="What is on your mind?">
+      <button type="submit">Save</button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+    <p id="notice" hidden></p>
+    <ul id="items" aria-label="Your items"></ul>
+    <p id="empty">Nothing here yet.</p>
+  </main>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

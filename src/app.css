@@ -1,0 +1,26 @@
+/* Design tokens: change colours here only. Contrast is AA or better. No pure red. No motion. */
+:root {
+  --bg: #f7f5f0; --fg: #26292e; --muted: #555b63; --line: #c9c5bb;
+  --accent: #2f5d62; --accent-fg: #ffffff; --focus: #1a4fd6;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1e2124; --fg: #ececec; --muted: #b3b8bd; --line: #444a50;
+    --accent: #8fc1c6; --accent-fg: #14282a; --focus: #9db8ff; }
+}
+* { box-sizing: border-box; animation: none !important; transition: none !important; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 1.125rem/1.6 system-ui, sans-serif; }
+main { max-width: 40rem; margin: 0 auto; padding: 1rem; }
+h1 { font-size: 1.5rem; margin: 0 0 1rem; }
+form { display: grid; gap: .5rem; }
+input, button { font: inherit; padding: .6rem .8rem; border: 2px solid var(--line);
+  border-radius: 6px; background: var(--bg); color: var(--fg); }
+button { cursor: pointer; }
+button[type="submit"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+ul { list-style: none; padding: 0; margin: 1rem 0 0; }
+li { display: grid; gap: .5rem; padding: .75rem 0; border-bottom: 1px solid var(--line); }
+li[data-state="done"] .text { text-decoration: line-through; color: var(--muted); }
+li[data-state="later"] .text { color: var(--muted); }
+.actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+#status, #notice, #empty { color: var(--muted); min-height: 1.6em; }
