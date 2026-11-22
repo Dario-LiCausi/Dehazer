@@ -114,3 +114,22 @@ test('makeId works without randomUUID (pages that are not secure contexts)', asy
     assert.notEqual(a, b);
   } finally { Object.defineProperty(globalThis.crypto, 'randomUUID', { value: real, configurable: true }); }
 });
+
+// v0.6: cues
+test('cue round trip: active and dropped keep their kind', async () => {
+  const a = make();
+  await a.add('task one'); const c1 = await a.add('cue one', 'cue'); const c2 = await a.add('cue two', 'cue');
+  await a.setState(c2.id, 'done');
+  const md = toMarkdown(await a.list());
+  assert.match(md, /cue one <!-- id\d+ cue -->/);
+  assert.match(md, /- \[x\] cue two <!-- id\d+ cue -->/);
+  const p = parseMarkdown(md);
+  assert.deepEqual(p.map((x) => [x.text, x.state, x.kind]), [['task one', 'active', 'task'], ['cue one', 'active', 'cue'], ['cue two', 'done', 'cue']]);
+  const b = make(); await b.importItems(p);
+  assert.deepEqual((await b.list()).map((i) => i.kind), ['task', 'cue', 'cue']);
+  void c1;
+});
+test('cue tag is ignored in a file without the export header', () => {
+  const p = parseMarkdown('- [ ] plain <!-- abc cue -->\n');
+  assert.equal(p[0].kind, 'task'); assert.equal(p[0].id, null);
+});

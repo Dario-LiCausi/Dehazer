@@ -1,14 +1,18 @@
 // Item store. All data logic lives here. The backend only saves and loads.
-// Item { id, text, state: "active" | "later" | "done", pos, created, updated }
+// Item { id, text, state: "active" | "later" | "done", pos, created, updated, kind?: "task" | "cue" }
+// No kind = task. A cue also has step, due, shown (see cues.js). A cue uses active (in rotation) and done (dropped).
 // Order = pos, set once when the item is added. Only the user changes it. Never re-sort.
+
+import { nextDue, sameDay } from './cues.js';
 
 export const STATES = ['active', 'later', 'done'];
 export const MAX_TEXT = 2000;
 export const NEXT_COUNT = 5;
+export const KINDS = ['task', 'cue'];
 
 // Next 5: the first five active items in the order they were added. Pure: no re-sorting, no scoring.
 export function nextFive(items) {
-  return items.filter((i) => i.state === 'active').slice(0, NEXT_COUNT);
+  return items.filter((i) => i.state === 'active' && i.kind !== 'cue').slice(0, NEXT_COUNT);
 }
 
 // randomUUID exists only on secure pages (https or localhost). getRandomValues works everywhere.
@@ -40,14 +44,15 @@ export function createStore(backend, opts = {}) {
     return items.sort((a, b) => a.pos - b.pos);
   }
 
-  function add(text) { return serial(() => atomic((b) => addNow(b, text))); }
+  function add(text, kind = 'task') { return serial(() => atomic((b) => addNow(b, text, undefined, kind))); }
   const topPos = async (b) => (await b.getAll()).reduce((m, i) => Math.max(m, i.pos), 0);
-  async function addNow(b, text, pos) {
+  async function addNow(b, text, pos, kind = 'task') {
     const clean = String(text ?? '').trim().slice(0, MAX_TEXT);
     if (!clean) return null; // Empty capture is ignored, never an error.
     const at = pos ?? (await topPos(b)) + 1;
     const t = now();
-    const item = { id: newId(), text: clean, state: 'active', pos: at, created: t, updated: t };
+    const item = { id: newId(), text: clean, state: 'active', pos: at, created: t, updated: t, kind: kind === 'cue' ? 'cue' : 'task' };
+    if (item.kind === 'cue') Object.assign(item, { step: 0, due: t, shown: 0 });
     await b.put(item);
     return item;
   }
@@ -61,6 +66,18 @@ export function createStore(backend, opts = {}) {
     await b.put(next);
     return next;
   }
+
+  // markCueShown runs once when a cue first shows on a new day: one step on, next due date set.
+  function markCueShown(id, at) { return serial(() => atomic(async (b) => {
+    const item = await b.get(id);
+    if (!item || item.kind !== 'cue' || item.state !== 'active') return null; // a cue dropped in another tab is not shown
+    if (item.shown && sameDay(item.shown, at)) return item; // a second tab on the same day: no second step
+    let step = (item.step ?? 0) + 1;
+    while (nextDue(item.created, step) <= at) step++; // skip repeats that already passed, so none bunch up
+    const next = { ...item, shown: at, step, due: nextDue(item.created, step), updated: now() };
+    await b.put(next);
+    return next;
+  })); }
 
   // remove returns the old item so the UI can offer undo.
   function remove(id) { return serial(() => atomic((b) => removeNow(b, id))); }
@@ -113,10 +130,10 @@ export function createStore(backend, opts = {}) {
 
   // addMany saves several texts in order (paste).
   // All lines of one paste go in one transaction: all saved or none.
-  function addMany(texts) { return serial(() => atomic(async (b) => {
+  function addMany(texts, kind = 'task') { return serial(() => atomic(async (b) => {
     const out = [];
     let pos = await topPos(b); // read once, then count up: one read for the whole paste
-    for (const t of texts) { const it = await addNow(b, t, pos + 1); if (it) { pos++; out.push(it); } }
+    for (const t of texts) { const it = await addNow(b, t, pos + 1, kind); if (it) { pos++; out.push(it); } }
     return out;
   })); }
 
@@ -135,13 +152,14 @@ export function createStore(backend, opts = {}) {
       const t = now();
       const id = p.id || newId();
       have.add(id);
-      await b.put({ id, text, state: p.state, pos: ++pos, created: t, updated: t });
+      const cue = p.kind === 'cue';
+      await b.put({ id, text, state: p.state, pos: ++pos, created: t, updated: t, kind: cue ? 'cue' : 'task', ...(cue ? { step: 0, due: t, shown: 0 } : {}) });
       added++;
     }
     return { added, skipped };
   }
 
-  return { list, add, addMany, edit, move, setState, remove, restore, importItems };
+  return { list, add, addMany, edit, move, setState, remove, restore, importItems, markCueShown };
 }
 
 // Backend for tests and for browsers without IndexedDB (data is lost on reload).

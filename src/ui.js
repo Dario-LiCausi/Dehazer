@@ -7,6 +7,8 @@ import { splitLines, MAX_PASTE } from './paste.js';
 import { loadSettings, saveSettings, applySettings } from './settings.js';
 import { whatsNewDue, markSeen } from './whatsnew.js';
 import { mountTools } from './tools-ui.js';
+import { pickCue, sameDay } from './cues.js';
+import { icon, mascot } from './icons.js';
 
 const MAX_FILE = 10 * 1024 * 1024; // bytes
 
@@ -18,7 +20,11 @@ export function mount(doc, store, env = {}) {
   const form = $('capture'); const input = $('text'); const status = $('status');
   const ul = $('items'); const empty = $('empty');
   const next5 = $('next5'); const nextEmpty = $('next-empty'); const backup = $('backup');
-  let undoTimer; let view = 'active'; let editing = false;
+  let undoTimer; let view = 'active'; let editing = false; let kind = 'task';
+  if (doc.createElementNS) {
+    for (const el of doc.querySelectorAll('[data-icon]')) el.prepend(icon(doc, el.dataset.icon));
+    for (const el of doc.querySelectorAll('[data-mascot]')) el.append(mascot(doc));
+  }
   let settings = loadSettings(storage);
   const win = env.win ?? doc.defaultView;
   if (win) applySettings(win, settings);
@@ -31,10 +37,21 @@ export function mount(doc, store, env = {}) {
     return b;
   }
 
+  let gen = 0; // a newer render wins: an older one that wakes up late draws nothing
   async function render(passive = false) {
+    const mine = ++gen;
     const items = await store.list();
+    if (mine !== gen) return;
     if (passive && editing) return; // a background redraw must never replace an open edit
+    const tasks = items.filter((i) => i.kind !== 'cue');
     const next = nextFive(items);
+
+    // Cue card: at most one cue, same place. It is marked shown once per day, so the schedule moves on.
+    let cue = pickCue(items, now());
+    if (cue && !(cue.shown && sameDay(cue.shown, now()))) { cue = await store.markCueShown(cue.id, now()); if (mine !== gen) return; } // null: another tab dropped it first
+    $('cue-card').hidden = !cue;
+    $('cue-text').textContent = cue ? cue.text : '';
+    $('cue-drop').onclick = cue && (() => changeState(cue, 'done', MSG.cueDropped));
 
     // Now card: one item, same place every day.
     const now1 = next[0];
@@ -48,13 +65,14 @@ export function mount(doc, store, env = {}) {
     next5.replaceChildren(...next.slice(1).map((it) => { const li = doc.createElement('li'); li.textContent = it.text; return li; }));
     $('next-section').hidden = next.length < 2;
 
-    const shown = items.filter((i) => i.state === view);
+    const shown = view === 'cue' ? items.filter((i) => i.kind === 'cue') : tasks.filter((i) => i.state === view);
     ul.replaceChildren(...shown.map((it, n) => row(it, n, shown.length)));
-    empty.textContent = { active: MSG.nowEmpty, later: MSG.laterEmpty, done: MSG.doneEmpty }[view];
+    empty.textContent = { active: MSG.nowEmpty, later: MSG.laterEmpty, done: MSG.doneEmpty, cue: MSG.cuesEmpty }[view];
     empty.hidden = shown.length > 0;
     for (const b of doc.querySelectorAll('[data-view]')) {
       b.setAttribute('aria-pressed', String(b.dataset.view === view));
-      if (b.dataset.view === 'later') b.textContent = `${MSG.viewLater} (${items.filter((i) => i.state === 'later').length})`; // quiet count, no badge, no colour
+      if (b.dataset.view === 'later') b.textContent = `${MSG.viewLater} (${tasks.filter((i) => i.state === 'later').length})`; // quiet count, no badge, no colour
+      if (b.dataset.view === 'cue') b.textContent = `${MSG.viewCues} (${items.filter((i) => i.kind === 'cue' && i.state === 'active').length})`;
     }
 
     // First time there is data: start the week now, so the note never greets a new user.
@@ -76,7 +94,9 @@ export function mount(doc, store, env = {}) {
     const span = doc.createElement('span');
     span.className = 'text'; span.textContent = item.text;
     const main = doc.createElement('div'); main.className = 'actions';
-    if (item.state === 'active') {
+    if (item.kind === 'cue' && item.state === 'active') {
+      main.append(button(MSG.dropButton, () => changeState(item, 'done', MSG.cueDropped)));
+    } else if (item.state === 'active') {
       main.append(button(MSG.doneButton, () => changeState(item, 'done', MSG.done)), button(MSG.notNowButton, () => changeState(item, 'later', MSG.later)));
     } else {
       main.append(button(MSG.bringBack, async () => { await store.setState(item.id, 'active'); say(MSG.broughtBack); await render(); }));
@@ -145,11 +165,20 @@ export function mount(doc, store, env = {}) {
       const lines = splitLines(typed);
       if (lines.length > MAX_PASTE) { input.value = typed; say(MSG.pasteTooMany); input.focus(); return; }
       if (lines.some((l) => l.length > MAX_TEXT)) { input.value = typed; say(MSG.pasteTooLong); input.focus(); return; }
-      const saved = await store.addMany(lines);
+      const saved = await store.addMany(lines, kind);
       if (saved.length) { say(saved.length === 1 ? MSG.saved : MSG.added(saved.length)); await render(); }
     } catch { input.value = input.value ? `${typed} ${input.value}` : typed; say(MSG.saveFailed); }
     input.focus();
   });
+
+  // Kind switch: Task or Cue. The choice stays until changed in this visit.
+  function setKind(k) {
+    kind = k;
+    for (const b of doc.querySelectorAll('[data-kind]')) b.setAttribute('aria-pressed', String(b.dataset.kind === kind));
+    input.placeholder = kind === 'cue' ? MSG.placeholderCue : MSG.placeholderTask;
+    $('save').textContent = kind === 'cue' ? MSG.saveCue : MSG.saveTask;
+  }
+  for (const b of doc.querySelectorAll('[data-kind]')) b.addEventListener('click', () => setKind(b.dataset.kind));
 
   for (const b of doc.querySelectorAll('[data-view]')) {
     b.addEventListener('click', () => { view = b.dataset.view; render(); });
@@ -185,7 +214,7 @@ export function mount(doc, store, env = {}) {
   // Settings dialog. Each choice is kept at once, on this device only.
   const dlg = $('settings'); const sform = $('settings-form');
   function fillSettings() {
-    for (const k of ['theme', 'size', 'font']) {
+    for (const k of ['theme', 'size', 'font', 'look']) {
       const r = sform.querySelector(`input[name="${k}"][value="${settings[k]}"]`); if (r) r.checked = true;
     }
     sform.elements.backupNote.checked = settings.backupNote;
@@ -196,7 +225,7 @@ export function mount(doc, store, env = {}) {
   });
   sform.addEventListener('change', () => {
     const next = { ...settings, backupNote: sform.elements.backupNote.checked };
-    for (const k of ['theme', 'size', 'font']) next[k] = sform.elements[k].value || settings[k];
+    for (const k of ['theme', 'size', 'font', 'look']) next[k] = sform.elements[k].value || settings[k];
     settings = next; saveSettings(storage, settings);
     if (win) applySettings(win, settings);
     render();

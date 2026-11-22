@@ -12,7 +12,7 @@ test('defaults hold calm, no reminders pushed', () => {
 });
 test('save then load round trip', () => {
   const s = mem(); saveSettings(s, { ...DEFAULTS, theme: 'dark', size: 'large', font: 'easy', backupNote: true });
-  assert.deepEqual(loadSettings(s), { theme: 'dark', size: 'large', font: 'easy', backupNote: true });
+  assert.deepEqual(loadSettings(s), { theme: 'dark', size: 'large', font: 'easy', backupNote: true, look: 'warm' });
 });
 test('bad stored values fall back to defaults', () => {
   const s = mem(); s.setItem('dehazer.settings', '{"theme":"pink","size":9,"font":"x","backupNote":"yes"}');
@@ -33,4 +33,10 @@ test('what changed: new user is not greeted; update shows once', () => {
   markSeen(s);
   assert.equal(whatsNewDue(s), false);
   assert.equal(s.getItem('dehazer.seenVersion'), VERSION);
+});
+
+test('look defaults to warm; a bad value falls back', () => {
+  assert.equal(DEFAULTS.look, 'warm');
+  const s = mem(); s.setItem('dehazer.settings', '{"look":"plain"}'); assert.equal(loadSettings(s).look, 'plain');
+  s.setItem('dehazer.settings', '{"look":"neon"}'); assert.equal(loadSettings(s).look, 'warm');
 });

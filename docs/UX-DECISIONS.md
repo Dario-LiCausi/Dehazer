@@ -49,6 +49,15 @@ Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, tr
 - Export has no size limit but import stops at 20000 items.
 
 ## Checks run
-- `npm test` (90 tests, including contrast for both themes).
+- `npm test` (tests include contrast for both themes and the Plain look, and the cue schedule).
 - Browser at 390, 820 and 1280 px, light and dark: no sideways scroll, no console errors.
-- Keyboard only: Tab order is Settings, capture, Save, Now card, views, rows.
+- Keyboard only: Tab order is Tools, Settings, Task and Cue switch, capture, Save, Now card, views, rows.
+
+## v0.6: memo kinds and the warm look
+- **Two kinds of memo.** A task goes straight to the list (To do, Now, Up next). A cue is something to remember. Old data has no kind and counts as a task.
+- **Cue schedule.** Day 1 (the save day), 3, 7, 14 and 30, then every 30 days. Days count from the local start of the day you saved it. One cue at a time, in a fixed slot. A cue stays all day once shown. It is marked shown only when it first appears on a new day, so a reload cannot skip a step.
+- **One action.** Drop, with 30 seconds to undo. Dropped cues stay in the Cues view with Back to list. No count of cues owed, no overdue state: a cue that is not shown today waits until the next open.
+- **Wording.** The card says "Remember" and shows the text. It describes, it does not command.
+- **Look.** Warm and friendly: Cue yellow, Now green, Up next blue, a 4 px coloured left edge, 16 px corners, small line icons and a small cloud mascot. Icons are decoration. Every card also has a text heading, so colour is never the only signal. No motion. A Plain look (v0.5 colours) is in Settings, Look.
+- **Not built yet:** Accept / Decline card for action memos, colour tags, pause all cues, return point tool. See BACKLOG.md.
+- **Known limits (cues).** With two tabs open at once, a cue can move to its next date in one tab while the other tab draws a different cue, or a cue dropped in one tab can leave the card empty until the next open. Nothing is lost. Export does not save the schedule: an imported cue starts again at day 1.

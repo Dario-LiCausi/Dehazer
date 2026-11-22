@@ -85,3 +85,75 @@ test('restore does not duplicate an item that still exists', async () => {
 test('remove of an unknown id returns null', async () => {
   assert.equal(await make().remove('nope'), null);
 });
+
+// v0.6: kinds
+test('add with kind cue sets schedule fields; default is task', async () => {
+  const s = make();
+  const t = await s.add('a task'); const c = await s.add('a reason', 'cue');
+  assert.equal(t.kind, 'task');
+  assert.equal(c.kind, 'cue'); assert.equal(c.step, 0); assert.equal(c.due, c.created); assert.equal(c.shown, 0);
+});
+test('addMany gives every line the kind', async () => {
+  const s = make();
+  const out = await s.addMany(['x', 'y'], 'cue');
+  assert.deepEqual(out.map((i) => i.kind), ['cue', 'cue']);
+});
+test('old item without kind counts as a task in nextFive', async () => {
+  const { nextFive } = await import('../src/store.js');
+  const old = { id: 'o', text: 'old', state: 'active', pos: 1, created: 1, updated: 1 };
+  assert.deepEqual(nextFive([old]).map((i) => i.id), ['o']);
+});
+test('nextFive ignores cues', async () => {
+  const { nextFive } = await import('../src/store.js');
+  const s = make();
+  await s.add('cue one', 'cue'); await s.add('task one');
+  assert.deepEqual(nextFive(await s.list()).map((i) => i.text), ['task one']);
+});
+test('markCueShown sets shown, advances step and due', async () => {
+  const day0 = new Date(2026, 0, 10, 9).getTime(); let n = 0;
+  const s = createStore(createMemoryBackend(), { now: () => day0, newId: () => `c${++n}` });
+  const c = await s.add('r', 'cue');
+  const after = await s.markCueShown(c.id, day0);
+  assert.equal(after.shown, day0); assert.equal(after.step, 1);
+  assert.equal(after.due, new Date(2026, 0, 12).getTime()); // day 3
+  assert.equal((await s.markCueShown(c.id, day0 + 2 * 86400000)).due, new Date(2026, 0, 16).getTime()); // day 7
+});
+test('markCueShown on a task or missing id does nothing', async () => {
+  const s = make(); const t = await s.add('task');
+  assert.equal(await s.markCueShown(t.id, 5), null);
+  assert.equal(await s.markCueShown('nope', 5), null);
+});
+test('drop and undo a cue use the done and active states', async () => {
+  const s = make(); const c = await s.add('r', 'cue');
+  assert.equal((await s.setState(c.id, 'done')).state, 'done');
+  assert.equal((await s.setState(c.id, 'active')).state, 'active');
+});
+test('import keeps the kind', async () => {
+  const s = make();
+  await s.importItems([{ id: 'z', text: 'cue z', state: 'active', kind: 'cue' }, { id: 'y', text: 'task y', state: 'active' }]);
+  const l = await s.list();
+  assert.equal(l.find((i) => i.id === 'z').kind, 'cue'); assert.equal(l.find((i) => i.id === 'z').step, 0);
+  assert.equal(l.find((i) => i.id === 'y').kind, 'task');
+});
+test('markCueShown twice on the same day does not advance the schedule twice', async () => {
+  const day0 = new Date(2026, 0, 10, 9).getTime(); let n = 0;
+  const s = createStore(createMemoryBackend(), { now: () => day0, newId: () => `c${++n}` });
+  const c = await s.add('r', 'cue');
+  await s.markCueShown(c.id, day0);
+  const again = await s.markCueShown(c.id, day0 + 3600000);
+  assert.equal(again.step, 1);
+});
+test('markCueShown skips repeats that already passed', async () => {
+  const day0 = new Date(2026, 0, 1, 9).getTime(); let n = 0;
+  const s = createStore(createMemoryBackend(), { now: () => day0, newId: () => `c${++n}` });
+  const c = await s.add('r', 'cue');
+  const late = new Date(2026, 1, 9, 9).getTime(); // day 40
+  const after = await s.markCueShown(c.id, late);
+  assert.equal(after.step, 5); // day 60 is the next one
+  assert.ok(after.due > late);
+});
+test('markCueShown ignores a dropped cue', async () => {
+  const s = make(); const c = await s.add('r', 'cue');
+  await s.setState(c.id, 'done');
+  assert.equal(await s.markCueShown(c.id, 5), null);
+});

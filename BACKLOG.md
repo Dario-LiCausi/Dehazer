@@ -20,3 +20,9 @@ Not built yet. Ordered by when we think about them, not by promise.
 - Streaks, overdue counters, scores.
 - AI of any kind by default.
 - Reminders or notifications that push.
+
+## From v0.6 (memo kinds)
+- Action memo with an Accept / Decline card.
+- Colour tags.
+- Pause all cues for a while.
+- Return point tool.

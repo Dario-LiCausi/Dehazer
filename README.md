@@ -2,13 +2,19 @@
 
 A free, open-source, local-first web app that helps ADHD and autistic adults **capture** a thought, **remember** it and **act** on it.
 
-**Status: early.** Capture, a Now card, Up next, Later, edit, move up and down, Settings, Markdown export and import, and offline use work in the browser. See [docs/DESIGN.md](docs/DESIGN.md) and [docs/UX-DECISIONS.md](docs/UX-DECISIONS.md).
+**Status: early.** Capture, two kinds of memo (tasks and cues), a Now card, Up next, Later, edit, move up and down, Settings, Markdown export and import, and offline use work in the browser. See [docs/DESIGN.md](docs/DESIGN.md) and [docs/UX-DECISIONS.md](docs/UX-DECISIONS.md).
+
+## Two kinds of memo
+- **Task:** goes straight to the list. One task shows in the Now card. The next four wait in Up next.
+- **Cue:** something to remember, like a reason or a fact you like. One cue at a time shows in its own card. It comes back on days 1, 3, 7, 14 and 30, then every month. The only action is Drop, with 30 seconds to undo.
+- **Look:** a warm look with soft colours is the default. A Plain look with the older colours is in Settings. There is no motion and no sound in either look.
 
 ## Screenshots
 ![Home on a wide screen: capture box, Now card, Up next, all items](docs/screens/home.png)
 ![Phone width, light](docs/screens/phone.png)
 ![Phone width, dark](docs/screens/dark.png)
-![Settings: colours, text size, font, backup reminder](docs/screens/settings.png)
+![Plain look: the older colours and shapes, no icons](docs/screens/plain.png)
+![Settings: look, colours, text size, font, backup reminder](docs/screens/settings.png)
 ![Tools shelf in Settings: every tool is off until you turn it on](docs/screens/tools-shelf.png)
 ![Show this: a message in very large type](docs/screens/show-this.png)
 ![Call panel: fill in a few boxes before a phone call](docs/screens/call-panel-form.png)
@@ -45,5 +51,6 @@ Export writes plain Markdown, one item per line:
     - [ ] buy bread <!-- id -->
     - [ ] call back <!-- id later -->
     - [x] book dentist <!-- id -->
+    - [ ] slow mornings help me think <!-- id cue -->
 
-The first lines hold `<!-- dehazer-export v1 -->`. Import reads ids only from files that carry it, so importing the same backup twice adds nothing. Any other Markdown checklist imports as new items. Line breaks in an item become spaces.
+The first lines hold `<!-- dehazer-export v1 -->`. The `later` and `cue` tags are read only from these files too. Cue schedules are not saved: an imported cue starts again at day 1. Import reads ids only from files that carry it, so importing the same backup twice adds nothing. Any other Markdown checklist imports as new items. Line breaks in an item become spaces.

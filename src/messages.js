@@ -86,7 +86,6 @@ Object.assign(MSG, {
   showNote: 'Not saved. It is cleared when you close this.',
   showTurnLabel: 'Message from the other person',
 });
-MSG.newBody = 'New: a third tool, Doctor sheet, off until you turn it on in Settings. Nothing else moved.';
 Object.assign(MSG, {
   callTitle: 'Call panel',
   callMake: 'Make my script',
@@ -96,3 +95,23 @@ Object.assign(MSG, {
   callNote: 'Not saved. It is cleared when you close this.',
   callBefore: 'Before you hang up',
 });
+
+// v0.6: warm look, task and cue memos.
+Object.assign(MSG, {
+  kindLabel: 'Kind',
+  kindTask: 'Task',
+  kindCue: 'Cue',
+  saveTask: 'Save task',
+  saveCue: 'Save cue',
+  placeholderTask: 'What is on your mind?',
+  placeholderCue: 'Something to remember, like a reason or a fact you like',
+  cueTitle: 'Remember',
+  dropButton: 'Drop',
+  cueDropped: 'Cue dropped.',
+  viewCues: 'Cues',
+  cuesEmpty: 'No cues yet. Switch to Cue above to save one.',
+  lookLabel: 'Look',
+  lookWarm: 'Warm',
+  lookPlain: 'Plain',
+});
+MSG.newBody = 'New: a warmer look, and two kinds of memo: tasks and cues. Cues come back on days 1, 3, 7, 14 and 30, then monthly. Prefer the old look? Settings, Look, Plain.';

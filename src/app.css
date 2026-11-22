@@ -22,7 +22,7 @@ textarea, input[type="text"] { font: inherit; width: 100%; padding: var(--space-
   border: 2px solid var(--border); border-radius: var(--radius); min-height: var(--touch); resize: vertical; }
 
 button, .btn { font: inherit; font-weight: 600; min-height: var(--touch); min-width: var(--touch); padding: 0 var(--space-4);
-  border: 2px solid var(--border); border-radius: var(--radius); background: var(--card); color: var(--fg);
+  border: 2px solid var(--border); border-radius: var(--radius-btn); background: var(--card); color: var(--fg);
   cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
 button.secondary, .btn.secondary { background: var(--card); color: var(--fg); border-color: var(--accent); }
@@ -32,7 +32,7 @@ button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg)
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .sr-input:focus-visible + * , label:has(+ .sr-input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
 
-.card { background: var(--card); border: 2px solid var(--border); border-radius: var(--radius); padding: var(--space-4); margin-top: var(--space-4); }
+.card { background: var(--card); border: var(--card-w) solid var(--border); border-radius: var(--radius); padding: var(--space-4); margin-top: var(--space-4); }
 .card h2 { margin-top: 0; font-size: var(--text-m); color: var(--muted); }
 .now-text { font-size: var(--text-l); font-weight: 600; margin: var(--space-2) 0 var(--space-4); }
 .actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
@@ -65,6 +65,39 @@ input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; acc
   :root { --muted: var(--fg); --border: var(--fg); --line: var(--fg); }
   button, .btn { border-width: 3px; }
 }
+
+/* v0.6 memo kinds and the warm look. The Plain look keeps the v0.5 shapes: tints are plain cards there. */
+.kinds { display: flex; gap: var(--space-2); }
+.kinds button { flex: 1 1 0; }
+.icon { flex: none; vertical-align: middle; }
+.top { justify-content: flex-start; }
+.top h1 { margin-right: auto; white-space: nowrap; }
+.top { gap: var(--space-2); flex-wrap: wrap; }
+.top button { gap: var(--space-1); white-space: nowrap; padding: 0 var(--space-2); }
+.mascot-slot { display: inline-flex; color: var(--accent); }
+.mascot { width: 2.25rem; height: 2.25rem; }
+.card h2 { display: flex; align-items: center; gap: var(--space-2); }
+.cue-card { background: var(--cue-bg); border-left: var(--edge-w) solid var(--cue-edge); }
+.now-card { background: var(--now-bg); border-left: var(--edge-w) solid var(--now-edge); }
+.next-card { background: var(--next-bg); border: var(--card-w) solid var(--border); border-left: var(--edge-w) solid var(--next-edge);
+  border-radius: var(--radius); padding: var(--space-2) var(--space-4) var(--space-3); margin-top: var(--space-4); }
+.next-card h2 { margin-top: var(--space-2); font-size: var(--text-m); display: flex; align-items: center; gap: var(--space-2); }
+.next-card li:last-child { border-bottom: 0; }
+.cue-card[hidden], .next-card[hidden] { display: none; }
+:root:not([data-look="plain"]) .card { border-color: var(--line); }
+:root:not([data-look="plain"]) .cue-card { border-left-color: var(--cue-edge); }
+:root:not([data-look="plain"]) .now-card { border-left-color: var(--now-edge); }
+:root:not([data-look="plain"]) .card h2, :root:not([data-look="plain"]) .next-card h2 { color: var(--fg); font-size: var(--text-m); }
+:root:not([data-look="plain"]) .card h2 { margin-bottom: var(--space-1); }
+:root:not([data-look="plain"]) h1 { font-weight: 800; font-size: var(--text-l); }
+:root:not([data-look="plain"]) .now-text { line-height: 1.4; }
+:root:not([data-look="plain"]) .next-card { border-color: var(--line); border-left-color: var(--next-edge); }
+:root:not([data-look="plain"]) .next-card li { color: var(--fg); border-bottom-color: var(--line); }
+:root:not([data-look="plain"]) button.quiet { text-decoration: none; }
+:root[data-look="plain"] .icon, :root[data-look="plain"] .mascot-slot { display: none; }
+:root[data-look="plain"] .next-card { background: none; border: 0; padding: 0; margin-top: 0; }
+:root[data-look="plain"] .next-card h2 { margin-top: var(--space-5); font-size: var(--text-l); }
+:root[data-look="plain"] .top { justify-content: space-between; }
 
 /* M5: Tools shelf. Nothing here shows until a tool is turned on. */
 dialog.show { max-width: none; width: calc(100% - 1rem); }

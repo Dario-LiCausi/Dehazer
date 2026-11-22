@@ -20,8 +20,16 @@ const PAIRS = [
   ['fg', 'bg', 4.5], ['muted', 'bg', 4.5], ['fg', 'card', 4.5], ['muted', 'card', 4.5],
   ['accent-fg', 'accent', 4.5], ['accent', 'bg', 3], ['accent', 'card', 3],
   ['focus', 'bg', 3], ['focus', 'card', 3], ['border', 'bg', 3], ['border', 'card', 3],
+  // v0.6 card tints: text, muted text and the left edge on each tint.
+  ['fg', 'cue-bg', 4.5], ['muted', 'cue-bg', 4.5], ['cue-edge', 'cue-bg', 3],
+  ['fg', 'now-bg', 4.5], ['muted', 'now-bg', 4.5], ['now-edge', 'now-bg', 3],
+  ['fg', 'next-bg', 4.5], ['muted', 'next-bg', 4.5], ['next-edge', 'next-bg', 3],
+  ['accent-fg', 'accent', 4.5], ['accent', 'cue-bg', 3], ['accent', 'now-bg', 3], ['accent', 'next-bg', 3],
+  ['focus', 'cue-bg', 3], ['focus', 'now-bg', 3], ['focus', 'next-bg', 3],
+  ['border', 'cue-bg', 3], ['border', 'now-bg', 3], ['border', 'next-bg', 3],
 ];
-for (const [name, sel] of [['light', ':root {'], ['dark', ':root[data-theme="dark"] {']]) {
+for (const [name, sel] of [['light', ':root {'], ['dark', ':root[data-theme="dark"] {'],
+  ['plain light', ':root[data-look="plain"][data-theme="light"] {'], ['plain dark', ':root[data-look="plain"][data-theme="dark"] {']]) {
   const t = block(sel);
   for (const [f, b, min] of PAIRS) {
     test(`${name}: ${f} on ${b} is at least ${min}`, () => {
