@@ -25,12 +25,12 @@ Goals:
 Non-goals (never): account login, default push notifications, streaks or overdue counters, cloud AI by default, ads, tracking, medical claims.
 
 ## 3b. What makes it different
-Other free apps exist, for example Mindwtr (AGPL, local-first, no streaks). Dehazer must offer something clear that they do not. The sharp point is **a promise that the app never surprises you**:
+Other free apps exist. Dehazer must offer something clear that they do not. The sharp point is **a promise that the app never surprises you**:
 1. **Layout freeze:** positions, colours and motion do not change without notice (see LAYOUT-FREEZE.md).
 2. **"What changed" screen:** before any update changes how the app looks, the app shows what will change and lets you keep the old layout for one release.
 3. **Sensory controls:** sound off, motion off, colour fixed, one column.
 4. **Gentle time signals (later):** an optional soft chime or a shrinking bar, never a nag.
-If this point is not clear and useful after M4, we should join an existing project instead of building a new one.
+If this point is not clear and useful after M4, we should rethink the project.
 Evidence: docs/RESEARCH.md.
 
 ## 4. MVP (5 features, no more)
@@ -90,7 +90,7 @@ Target WCAG 2.2 AA. Full keyboard use. Visible focus. Labels for screen readers.
 - CI from day one: lint, unit tests, axe check.
 - Governance: the project lead leads design and ND review. **Find one co-maintainer who codes before inviting many contributors**.
 - Channels after v0.1 works: awesome-adhd (it accepts projects through an issue form), ND communities (listen first, no spam), GitHub topics, other awesome lists. Show HN is a weak channel for this topic.
-- Before v0.1: try the closest existing app for a week, then open one design issue with them ("stable mode, what-changed screen, sensory settings"). Their answer tells us if we build or join.
+- Before v0.1: test with real users (see M4). Their answers tell us what to keep.
 
 ## 11. Milestones (part-time, all effort figures are guesses)
 | Step | Output | Gate |
@@ -99,7 +99,7 @@ Target WCAG 2.2 AA. Full keyboard use. Visible focus. Labels for screen readers.
 | M1 | Capture + list + local save | Tests pass |
 | M2 | Next 5 + Markdown export/import | Round-trip test |
 | M3 | Stable/Fresh + a11y pass | axe clean |
-| M3b | Use the closest existing app for 1 week, open one design issue there | Their answer recorded |
+| M3b | UI and UX upgrade (m3-ui-ux), then owner review | Owner OK on screenshots |
 | M4 | Prototype test: 5 ND adults (2+ autistic), 14 days | Count who still opens it on day 14 |
 | M5 | Public v0.1 + announce | Lead OK |
 
