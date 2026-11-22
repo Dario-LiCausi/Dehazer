@@ -77,3 +77,16 @@ dialog.show { max-width: none; width: calc(100% - 1rem); }
 #call-edit[hidden], #call-view[hidden] { display: none; }
 #call-fields label { display: block; margin-top: var(--space-3); }
 #call-fields input { width: 100%; }
+.doc-sheet { margin: 0 0 var(--space-4); }
+.doc-sheet:focus { outline: none; }
+.doc-sheet h3 { margin: var(--space-4) 0 var(--space-1); }
+.doc-sheet p { margin: 0 0 var(--space-1); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1.25rem; }
+#doc-edit[hidden], #doc-view[hidden] { display: none; }
+#doc-fields label { display: block; margin-top: var(--space-3); }
+#doc-fields input, #doc-fields textarea { width: 100%; }
+@media print {
+  html[data-printing="doctor"] main, html[data-printing="doctor"] #tools-dialog, html[data-printing="doctor"] #settings,
+  html[data-printing="doctor"] #show-dialog, html[data-printing="doctor"] #call-dialog { display: none !important; }
+  html[data-printing="doctor"] #doctor-dialog { position: static; border: 0; width: auto; max-width: none; padding: 0; color: #000; background: #fff; }
+  html[data-printing="doctor"] #doctor-dialog .actions, html[data-printing="doctor"] #doctor-dialog .hint, html[data-printing="doctor"] #doc-edit { display: none; }
+}

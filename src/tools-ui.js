@@ -1,5 +1,5 @@
 // Tools shelf UI. Called once from mount(). With every tool off, the page shows no new control.
-import { TOOLS, loadTools, saveTools, cleanMessage, MAX_SHOW, buildScript, CALL_FIELDS, MAX_FIELD, beforeHangUp } from './tools.js';
+import { TOOLS, loadTools, saveTools, cleanMessage, MAX_SHOW, buildScript, CALL_FIELDS, MAX_FIELD, beforeHangUp, buildSheet, checkSheet } from './tools.js';
 import { MSG } from './messages.js';
 
 export function mountTools(doc, storage) {
@@ -57,7 +57,7 @@ export function mountTools(doc, storage) {
   sd.addEventListener('close', finishShow); // Esc fires close too
   doc.defaultView?.addEventListener('pagehide', clear);
   $('tools-close').addEventListener('click', () => shut(tdlg));
-  tdlg.addEventListener('close', () => { if (!sd.open && !cd.open) toTools(); });
+  tdlg.addEventListener('close', () => { if (!sd.open && !cd.open && !dd.open) toTools(); });
 
   // Call panel. Same rules: memory only, cleared on close, focus returns to the Tools button.
   const cd = $('call-dialog'); const cbig = $('call-big'); const inputs = {};
@@ -79,7 +79,50 @@ export function mountTools(doc, storage) {
   cd.addEventListener('close', finishCall);
   doc.defaultView?.addEventListener('pagehide', callClear);
 
+  // Doctor sheet. Memory only, cleared on close. Print uses the browser's own print, so the text stays selectable.
+  const dd = $('doctor-dialog'); const dsheet = $('doc-sheet');
+  const DOC_FIELDS = [
+    { id: 'reason', label: 'Why I am here today', area: false },
+    { id: 'main', label: 'The main thing I want to talk about', area: false },
+    { id: 'help', label: 'What helps me in the room (for example: explain each step first)', area: false },
+    { id: 'questions', label: 'Questions I want to ask (one on each line, up to 5)', area: true },
+  ];
+  const dins = {};
+  $('doc-fields').replaceChildren(...DOC_FIELDS.map((f) => {
+    const l = doc.createElement('label'); l.htmlFor = `doc-${f.id}`; l.textContent = f.label;
+    const i = doc.createElement(f.area ? 'textarea' : 'input');
+    if (f.area) i.rows = 4; else i.type = 'text';
+    i.id = `doc-${f.id}`; i.maxLength = 500; i.autocomplete = 'off'; dins[f.id] = i;
+    const w = doc.createElement('div'); w.append(l, i); return w;
+  }));
+  const docEdit = () => { $('doc-view').hidden = true; $('doc-edit').hidden = false; dins.reason.focus(); };
+  const docClear = () => { $('doc-view').hidden = true; $('doc-edit').hidden = false; for (const i of Object.values(dins)) i.value = ''; $('doc-error').textContent = ''; dsheet.replaceChildren(); $('doc-writing').checked = true; };
+  $('doc-go').addEventListener('click', () => {
+    const answers = { ...Object.fromEntries(Object.entries(dins).map(([k, i]) => [k, i.value])), writing: $('doc-writing').checked };
+    const problem = checkSheet(answers); $('doc-error').textContent = problem;
+    if (problem) { dins.questions.focus(); return; } // nothing is cut without the user knowing
+    const sheet = buildSheet(answers);
+    dsheet.replaceChildren(...sheet.flatMap((s) => {
+      const h = doc.createElement('h3'); h.textContent = s.heading;
+      return [h, ...s.lines.map((t) => { const p = doc.createElement('p'); p.textContent = t; return p; })];
+    }));
+    if (!sheet.length) { dins.reason.focus(); return; }
+    $('doc-edit').hidden = true; $('doc-view').hidden = false; dsheet.focus();
+  });
+  $('doc-change').addEventListener('click', () => { dsheet.replaceChildren(); docEdit(); });
+  $('doc-print').addEventListener('click', () => {
+    // Print rules apply only while we print the sheet. Ctrl+P elsewhere prints the page as before.
+    const w = doc.defaultView; const root = doc.documentElement;
+    root.dataset.printing = 'doctor'; w?.addEventListener('afterprint', () => { delete root.dataset.printing; }, { once: true });
+    w?.print();
+  });
+  const finishDoc = () => { docClear(); toTools(); };
+  for (const id of ['doc-close', 'doc-close2']) $(id).addEventListener('click', () => { shut(dd); if (!dd.close) finishDoc(); });
+  dd.addEventListener('close', finishDoc);
+  doc.defaultView?.addEventListener('pagehide', docClear);
+
   const openers = {
+    doctor: () => { docClear(); docEdit(); open(dd); dins.reason.focus(); },
     call: () => { callClear(); callEdit(); open(cd); inputs.who.focus(); },
     show: () => { clear(); showEdit(MSG.showLabel); open(sd); text.focus(); } };
   openBtn.addEventListener('click', () => open(tdlg));

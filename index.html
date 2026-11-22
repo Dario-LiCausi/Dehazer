@@ -140,6 +140,28 @@
       </div>
     </section>
   </dialog>
+  <dialog id="doctor-dialog" class="show" aria-labelledby="doc-h">
+    <section id="doc-edit">
+      <h2 id="doc-h">Doctor sheet</h2>
+      <div id="doc-fields"></div>
+      <label class="row"><input type="checkbox" id="doc-writing" checked> Ask for the next step in writing</label>
+      <p id="doc-error" class="hint" role="status"></p>
+      <p class="hint">Not saved. It is cleared when you close this. Nothing is sent anywhere.</p>
+      <div class="actions">
+        <button type="button" id="doc-go" class="primary">Make my sheet</button>
+        <button type="button" id="doc-close" class="secondary">Close</button>
+      </div>
+    </section>
+    <section id="doc-view" hidden>
+      <div id="doc-sheet" class="doc-sheet" tabindex="-1"></div>
+      <p class="hint">A printed copy or a saved PDF holds your text. Keep it or bin it as you like.</p>
+      <div class="actions">
+        <button type="button" id="doc-print" class="secondary">Print</button>
+        <button type="button" id="doc-change" class="secondary">Change my answers</button>
+        <button type="button" id="doc-close2" class="secondary">Close</button>
+      </div>
+    </section>
+  </dialog>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

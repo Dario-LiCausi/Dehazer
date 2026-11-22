@@ -34,6 +34,12 @@ Off by default (opt-in). A reminder can feel like nagging. Export stays one tap 
 - "Ask them to go slowly" is a tick box, off by default. Nothing is assumed about the user. "Ask for it in writing" is on by default because a written copy is the point of the tool.
 - Nothing is saved. The boxes live on the page and are cleared when the panel closes. No speech output, no sound, no network.
 
+## Doctor sheet (v0.5.0)
+- Third tool on the shelf, off by default. Four boxes (why I am here, the main thing, what helps me in the room, up to 5 questions) become a one-page sheet. Empty boxes leave no heading. A tick box, on by default, adds "Tell me the next step in writing before I leave."
+- The sheet gives no advice and makes no health claim. It only repeats what the user typed.
+- Print uses the browser's own print, so the text stays selectable. The print view shows the sheet only.
+- Nothing is saved. Boxes are cleared when the sheet closes. Nothing is sent anywhere.
+
 ## Waits (see [BACKLOG.md](../BACKLOG.md))
 Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, translations, soft time signals.
 
@@ -43,6 +49,6 @@ Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, tr
 - Export has no size limit but import stops at 20000 items.
 
 ## Checks run
-- `npm test` (86 tests, including contrast for both themes).
+- `npm test` (90 tests, including contrast for both themes).
 - Browser at 390, 820 and 1280 px, light and dark: no sideways scroll, no console errors.
 - Keyboard only: Tab order is Settings, capture, Save, Now card, views, rows.

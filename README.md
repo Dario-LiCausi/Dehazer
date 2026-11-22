@@ -13,6 +13,8 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 ![Show this: a message in very large type](docs/screens/show-this.png)
 ![Call panel: fill in a few boxes before a phone call](docs/screens/call-panel-form.png)
 ![Call panel: a short script and a list for the end of the call](docs/screens/call-panel.png)
+![Doctor sheet: fill in a few boxes before a visit](docs/screens/doctor-sheet-form.png)
+![Doctor sheet: a one-page sheet to read out, hand over or print](docs/screens/doctor-sheet.png)
 ![The More row on one item: Edit, Move up, Move down, Delete](docs/screens/more.png)
 
 ## Three promises

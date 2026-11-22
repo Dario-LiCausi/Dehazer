@@ -86,7 +86,7 @@ Object.assign(MSG, {
   showNote: 'Not saved. It is cleared when you close this.',
   showTurnLabel: 'Message from the other person',
 });
-MSG.newBody = 'New: a second tool, Call panel, off until you turn it on in Settings. Nothing else moved.';
+MSG.newBody = 'New: a third tool, Doctor sheet, off until you turn it on in Settings. Nothing else moved.';
 Object.assign(MSG, {
   callTitle: 'Call panel',
   callMake: 'Make my script',
