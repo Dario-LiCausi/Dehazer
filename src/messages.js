@@ -86,4 +86,13 @@ Object.assign(MSG, {
   showNote: 'Not saved. It is cleared when you close this.',
   showTurnLabel: 'Message from the other person',
 });
-MSG.newBody = 'New: Tools, off until you turn one on in Settings, and a first tool, Show this. Nothing else moved.';
+MSG.newBody = 'New: a second tool, Call panel, off until you turn it on in Settings. Nothing else moved.';
+Object.assign(MSG, {
+  callTitle: 'Call panel',
+  callMake: 'Make my script',
+  callChange: 'Change my answers',
+  callSlow: 'Ask them to go slowly',
+  callWriting: 'Ask for it in writing',
+  callNote: 'Not saved. It is cleared when you close this.',
+  callBefore: 'Before you hang up',
+});

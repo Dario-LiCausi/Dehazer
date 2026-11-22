@@ -1,5 +1,5 @@
 // Tools shelf UI. Called once from mount(). With every tool off, the page shows no new control.
-import { TOOLS, loadTools, saveTools, cleanMessage, MAX_SHOW } from './tools.js';
+import { TOOLS, loadTools, saveTools, cleanMessage, MAX_SHOW, buildScript, CALL_FIELDS, MAX_FIELD, beforeHangUp } from './tools.js';
 import { MSG } from './messages.js';
 
 export function mountTools(doc, storage) {
@@ -57,9 +57,31 @@ export function mountTools(doc, storage) {
   sd.addEventListener('close', finishShow); // Esc fires close too
   doc.defaultView?.addEventListener('pagehide', clear);
   $('tools-close').addEventListener('click', () => shut(tdlg));
-  tdlg.addEventListener('close', () => { if (!sd.open) toTools(); });
+  tdlg.addEventListener('close', () => { if (!sd.open && !cd.open) toTools(); });
 
-  const openers = { show: () => { clear(); showEdit(MSG.showLabel); open(sd); text.focus(); } };
+  // Call panel. Same rules: memory only, cleared on close, focus returns to the Tools button.
+  const cd = $('call-dialog'); const cbig = $('call-big'); const inputs = {};
+  $('call-fields').replaceChildren(...CALL_FIELDS.map((f) => {
+    const l = doc.createElement('label'); l.htmlFor = `call-${f.id}`; l.textContent = f.label;
+    const i = doc.createElement('input'); i.type = 'text'; i.id = `call-${f.id}`; i.maxLength = MAX_FIELD; i.autocomplete = 'off'; inputs[f.id] = i;
+    const w = doc.createElement('div'); w.append(l, i); return w;
+  }));
+  const callEdit = () => { $('call-view').hidden = true; $('call-edit').hidden = false; inputs.who.focus(); };
+  const callClear = () => { $('call-view').hidden = true; $('call-edit').hidden = false; for (const i of Object.values(inputs)) i.value = ''; cbig.textContent = ''; $('call-slow').checked = false; $('call-writing').checked = true; };
+  $('call-go').addEventListener('click', () => {
+    cbig.textContent = buildScript({ ...Object.fromEntries(Object.entries(inputs).map(([k, i]) => [k, i.value])), slow: $('call-slow').checked, writing: $('call-writing').checked });
+    $('call-before').replaceChildren(...beforeHangUp($('call-writing').checked).map((t) => { const li = doc.createElement('li'); li.textContent = t; return li; }));
+    $('call-edit').hidden = true; $('call-view').hidden = false; cbig.focus();
+  });
+  $('call-change').addEventListener('click', () => { cbig.textContent = ''; callEdit(); });
+  const finishCall = () => { callClear(); toTools(); };
+  for (const id of ['call-close', 'call-close2']) $(id).addEventListener('click', () => { shut(cd); if (!cd.close) finishCall(); });
+  cd.addEventListener('close', finishCall);
+  doc.defaultView?.addEventListener('pagehide', callClear);
+
+  const openers = {
+    call: () => { callClear(); callEdit(); open(cd); inputs.who.focus(); },
+    show: () => { clear(); showEdit(MSG.showLabel); open(sd); text.focus(); } };
   openBtn.addEventListener('click', () => open(tdlg));
   refresh();
 }

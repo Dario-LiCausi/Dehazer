@@ -23,6 +23,7 @@ Plain words. What Dehazer does today, and how we check it.
 ## Tools shelf
 - Tool panels are native dialogs: Esc closes, focus moves into the panel and returns to the Tools button.
 - Show this uses a visible label, large type that wraps (no sideways scroll at 390 px, Larger text size, dark mode) and no motion.
+- Call panel: every box has a visible label; focus goes to the script when it appears and returns to the Tools button on close.
 - Tools are off by default, so people who do not want them never see them.
 
 ## What we do not know yet

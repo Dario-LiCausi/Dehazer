@@ -118,6 +118,28 @@
       </div>
     </section>
   </dialog>
+  <dialog id="call-dialog" class="show" aria-labelledby="call-h">
+    <section id="call-edit">
+      <h2 id="call-h">Call panel</h2>
+      <div id="call-fields"></div>
+      <label class="row"><input type="checkbox" id="call-slow"> Ask them to go slowly</label>
+      <label class="row"><input type="checkbox" id="call-writing" checked> Ask for it in writing</label>
+      <p class="hint">Not saved. It is cleared when you close this.</p>
+      <div class="actions">
+        <button type="button" id="call-go" class="primary">Make my script</button>
+        <button type="button" id="call-close" class="secondary">Close</button>
+      </div>
+    </section>
+    <section id="call-view" hidden>
+      <p id="call-big" class="call-big" tabindex="-1"></p>
+      <h3 id="call-before-h">Before you hang up</h3>
+      <ul id="call-before"></ul>
+      <div class="actions">
+        <button type="button" id="call-change" class="secondary">Change my answers</button>
+        <button type="button" id="call-close2" class="secondary">Close</button>
+      </div>
+    </section>
+  </dialog>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

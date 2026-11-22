@@ -29,6 +29,11 @@ Off by default (opt-in). A reminder can feel like nagging. Export stays one tap 
 - First tool: Show this. A typed message in very large type, for a day when speech is hard. It is never saved: it lives in memory and is cleared when the panel closes. "Their turn" opens an empty box so the other person can type back.
 - One tool per release. No sound, no motion, no network.
 
+## Call panel (v0.4.0)
+- Second tool on the shelf, off by default. Five visible-label boxes (who, why, my name, my number for a call back, best time) become a short script in large type, plus a list for the end of the call: say the next step back, ask for it in writing, ask for a name.
+- "Ask them to go slowly" is a tick box, off by default. Nothing is assumed about the user. "Ask for it in writing" is on by default because a written copy is the point of the tool.
+- Nothing is saved. The boxes live on the page and are cleared when the panel closes. No speech output, no sound, no network.
+
 ## Waits (see [BACKLOG.md](../BACKLOG.md))
 Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, translations, soft time signals.
 
@@ -38,6 +43,6 @@ Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, tr
 - Export has no size limit but import stops at 20000 items.
 
 ## Checks run
-- `npm test` (82 tests, including contrast for both themes).
+- `npm test` (86 tests, including contrast for both themes).
 - Browser at 390, 820 and 1280 px, light and dark: no sideways scroll, no console errors.
 - Keyboard only: Tab order is Settings, capture, Save, Now card, views, rows.
