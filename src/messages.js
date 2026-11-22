@@ -61,7 +61,7 @@ Object.assign(MSG, {
   closeButton: 'Close',
   themeLabel: 'Colours', themeSystem: 'Same as my device', themeLight: 'Light', themeDark: 'Dark',
   sizeLabel: 'Text size', sizeNormal: 'Normal', sizeLarge: 'Large', sizeLarger: 'Larger',
-  fontLabel: 'Font', fontSystem: 'Device font', fontEasy: 'Easy-read font',
+  fontLabel: 'Font', fontSystem: 'Device font', fontEasy: 'Easy-read font (default)',
   motionNote: 'Motion is always off in Dehazer.',
   backupToggle: 'Remind me to export a copy (off by default)',
   settingsSaved: 'Setting kept on this device.',
@@ -111,7 +111,8 @@ Object.assign(MSG, {
   viewCues: 'Cues',
   cuesEmpty: 'No cues yet. Switch to Cue above to save one.',
   lookLabel: 'Look',
-  lookWarm: 'Warm',
+  lookWarm: 'Honey and pine',
+  lookV06: 'Old warm look (v0.6)',
   lookPlain: 'Plain',
 });
 MSG.newBody = 'New: a warmer look, and two kinds of memo: tasks and cues. Cues come back on days 1, 3, 7, 14 and 30, then monthly. Prefer the old look? Settings, Look, Plain.';

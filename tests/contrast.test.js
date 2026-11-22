@@ -29,6 +29,7 @@ const PAIRS = [
   ['border', 'cue-bg', 3], ['border', 'now-bg', 3], ['border', 'next-bg', 3],
 ];
 for (const [name, sel] of [['light', ':root {'], ['dark', ':root[data-theme="dark"] {'],
+  ['v0.6 light', ':root[data-look="v06"][data-theme="light"] {'], ['v0.6 dark', ':root[data-look="v06"][data-theme="dark"] {'],
   ['plain light', ':root[data-look="plain"][data-theme="light"] {'], ['plain dark', ':root[data-look="plain"][data-theme="dark"] {']]) {
   const t = block(sel);
   for (const [f, b, min] of PAIRS) {

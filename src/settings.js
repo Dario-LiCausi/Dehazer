@@ -1,6 +1,6 @@
 // Settings live on this device only. Every value is checked on load. Defaults are calm.
-export const DEFAULTS = { theme: 'system', size: 'normal', font: 'system', backupNote: false, look: 'warm' };
-const ALLOWED = { theme: ['system', 'light', 'dark'], size: ['normal', 'large', 'larger'], font: ['system', 'easy'], look: ['warm', 'plain'] };
+export const DEFAULTS = { theme: 'system', size: 'normal', font: 'easy', backupNote: false, look: 'warm' };
+const ALLOWED = { theme: ['system', 'light', 'dark'], size: ['normal', 'large', 'larger'], font: ['system', 'easy'], look: ['warm', 'v06', 'plain'] };
 const KEY = 'dehazer.settings';
 
 export function loadSettings(storage) {

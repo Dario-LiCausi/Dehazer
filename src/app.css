@@ -6,11 +6,11 @@
 
 * { box-sizing: border-box; animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 html { font-size: calc(100% * var(--scale)); }
-body { margin: 0; background: var(--bg); color: var(--fg); font: var(--text-m)/1.6 var(--font); overflow-wrap: anywhere; }
-main { max-width: 38rem; margin: 0 auto; padding: var(--space-4); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: var(--text-m)/1.5 var(--font); overflow-wrap: anywhere; }
+main { max-width: 38rem; margin: 0 auto; padding: var(--space-5) var(--space-3); }  /* top and bottom are larger than the sides */
 .top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
-h1 { font-size: var(--text-xl); margin: 0; }
-h2 { font-size: var(--text-l); margin: var(--space-5) 0 var(--space-2); }
+h1 { font-size: var(--text-xl); margin: 0; line-height: 1.2; }
+h2 { font-size: var(--text-l); margin: var(--space-5) 0 var(--space-2); line-height: 1.2; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .sr-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
 .hint, #status, #notice, #empty, #backup { color: var(--muted); font-size: var(--text-s); margin: var(--space-1) 0; }
@@ -19,20 +19,20 @@ h2 { font-size: var(--text-l); margin: var(--space-5) 0 var(--space-2); }
 form#capture { display: grid; gap: var(--space-2); margin-top: var(--space-4); }
 label { font-weight: 600; }
 textarea, input[type="text"] { font: inherit; width: 100%; padding: var(--space-3); color: var(--fg); background: var(--card);
-  border: 2px solid var(--border); border-radius: var(--radius); min-height: var(--touch); resize: vertical; }
+  border: 1.5px solid var(--border); border-radius: var(--radius-btn); min-height: var(--touch); resize: vertical; }
 
 button, .btn { font: inherit; font-weight: 600; min-height: var(--touch); min-width: var(--touch); padding: 0 var(--space-4);
-  border: 2px solid var(--border); border-radius: var(--radius-btn); background: var(--card); color: var(--fg);
+  border: 1.5px solid var(--border); border-radius: var(--radius-btn); background: var(--line); color: var(--fg);
   cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-button.secondary, .btn.secondary { background: var(--card); color: var(--fg); border-color: var(--accent); }
+button.secondary, .btn.secondary { background: var(--line); color: var(--fg); border-color: var(--accent); }
 button.quiet { background: transparent; border-color: transparent; text-decoration: underline; }
 button.small, .btn.small { font-weight: 400; font-size: var(--text-s); }
 button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .sr-input:focus-visible + * , label:has(+ .sr-input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
 
-.card { background: var(--card); border: var(--card-w) solid var(--border); border-radius: var(--radius); padding: var(--space-4); margin-top: var(--space-4); }
+.card { background: var(--card); border: var(--card-w) solid var(--border); border-radius: var(--radius); padding: var(--space-4); margin-top: var(--space-4); box-shadow: var(--shadow); }
 .card h2 { margin-top: 0; font-size: var(--text-m); color: var(--muted); }
 .now-text { font-size: var(--text-l); font-weight: 600; margin: var(--space-2) 0 var(--space-4); }
 .actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
@@ -52,13 +52,13 @@ details.more .actions { margin-top: var(--space-2); }
 #tools { display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center; margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--line); }
 #tools #backup { flex-basis: 100%; }
 
-dialog { max-width: 30rem; width: calc(100% - 2rem); background: var(--card); color: var(--fg); border: 2px solid var(--border); border-radius: var(--radius); padding: var(--space-4); }
-dialog::backdrop { background: rgba(0, 0, 0, .5); }
+dialog { max-width: 30rem; width: calc(100% - 2rem); background: var(--card); color: var(--fg); border: 1.5px solid var(--border); border-radius: var(--radius); padding: var(--space-4); }
+dialog::backdrop { background: rgb(43 33 27 / .5); }
 dialog h2 { margin-top: 0; }
 fieldset { border: 1px solid var(--border); border-radius: var(--radius); margin: 0 0 var(--space-3); padding: var(--space-2) var(--space-3); }
 fieldset label, label.row { display: flex; align-items: center; gap: var(--space-2); font-weight: 400; min-height: var(--touch); }
 input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; accent-color: var(--accent); }
-@media (max-width: 420px) { .actions button { flex: 1 1 8rem; } }
+@media (max-width: 420px) { .actions button { flex: 1 1 8rem; } #items li .actions { flex: 0 0 auto; flex-wrap: nowrap; } #items li .actions button { flex: 0 0 auto; padding: 0 var(--space-3); } }
 
 /* Device asks for more contrast: stronger borders and muted text. */
 @media (prefers-contrast: more) {
@@ -98,6 +98,27 @@ input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; acc
 :root[data-look="plain"] .next-card { background: none; border: 0; padding: 0; margin-top: 0; }
 :root[data-look="plain"] .next-card h2 { margin-top: var(--space-5); font-size: var(--text-l); }
 :root[data-look="plain"] .top { justify-content: space-between; }
+
+
+/* v0.7 Honey and pine. Tints are full soft cards (no left bar). The v0.6 and Plain looks keep their own shapes. */
+:root:not([data-look="plain"]):not([data-look="v06"]) .cue-card,
+:root:not([data-look="plain"]):not([data-look="v06"]) .now-card,
+:root:not([data-look="plain"]):not([data-look="v06"]) .next-card { border-left: 0; border: var(--card-w) solid var(--line); }
+:root:not([data-look="plain"]):not([data-look="v06"]) .card h2 .icon { color: var(--cue-edge); }
+:root:not([data-look="plain"]):not([data-look="v06"]) .now-card h2 .icon { color: var(--now-edge); }
+:root:not([data-look="plain"]):not([data-look="v06"]) .next-card h2 .icon { color: var(--next-edge); }
+:root:not([data-look="plain"]):not([data-look="v06"]) .icon { width: 1.1em; height: 1.1em; }
+/* List rows: Done is a quiet tint, Not now is text only, so two buttons side by side never look the same. */
+:root:not([data-look="plain"]) #items li .actions > button:nth-child(2) { background: transparent; border-color: transparent; color: var(--muted); }
+:root:not([data-look="plain"]) details.more .actions button { background: transparent; }
+:root[data-look="v06"] .cue-card, :root[data-look="v06"] .now-card, :root[data-look="v06"] .next-card { border-left: var(--edge-w) solid var(--cue-edge); }
+:root[data-look="v06"] .now-card { border-left-color: var(--now-edge); }
+:root[data-look="v06"] .next-card { border-left-color: var(--next-edge); }
+:root[data-look="v06"] button, :root[data-look="v06"] .btn { background: var(--card); border-width: 2px; }
+:root[data-look="v06"] textarea, :root[data-look="v06"] input[type="text"] { border-width: 2px; }
+:root[data-look="plain"] button, :root[data-look="plain"] .btn { background: var(--card); border-width: 2px; }
+:root[data-look="plain"] textarea, :root[data-look="plain"] input[type="text"] { border-width: 2px; }
+:root[data-look="plain"] main { padding: var(--space-4); }
 
 /* M5: Tools shelf. Nothing here shows until a tool is turned on. */
 dialog.show { max-width: none; width: calc(100% - 1rem); }
