@@ -21,11 +21,11 @@
     </header>
 
     <form id="capture" autocomplete="off">
-      <div class="kinds" role="group" aria-label="Kind">
+      <div class="kinds" role="group" aria-label="Type">
         <button type="button" data-kind="task" aria-pressed="true">Task</button>
         <button type="button" data-kind="cue" aria-pressed="false">Cue</button>
       </div>
-      <label for="text">Capture a thought</label>
+      <label for="text">Add a thought</label>
       <textarea id="text" name="text" rows="2" maxlength="20000" placeholder="What is on your mind?"></textarea>
       <p class="hint" id="paste-hint">Paste a list to add one item per line.</p>
       <button type="submit" class="primary" id="save">Save task</button>
@@ -57,25 +57,25 @@
     <section aria-labelledby="next-h" id="next-section" class="next-card">
       <h2 id="next-h"><span data-icon="next"></span>Up next</h2>
       <ol id="next5"></ol>
-      <p id="next-empty" hidden>Nothing else waiting.</p>
+      <p id="next-empty" hidden>Nothing else is waiting.</p>
     </section>
 
     <section aria-labelledby="all-h">
-      <h2 id="all-h">All items</h2>
+      <h2 id="all-h">Your list</h2>
       <div class="views" role="group" aria-label="Show">
         <button type="button" data-view="active" aria-pressed="true">To do</button>
         <button type="button" data-view="later" aria-pressed="false">Later</button>
         <button type="button" data-view="done" aria-pressed="false">Done</button>
         <button type="button" data-view="cue" aria-pressed="false">Cues</button>
       </div>
-      <ul id="items" aria-label="Your items"></ul>
-      <p id="empty">Nothing here yet.</p>
+      <ul id="items" aria-label="Your list"></ul>
+      <p id="empty">Empty for now. Add a thought above.</p>
     </section>
 
     <footer id="tools">
       <h2 class="sr">Backup</h2>
       <button type="button" id="export" class="secondary small">Export</button>
-      <label for="import" class="btn secondary small">Import a Markdown file</label>
+      <label for="import" class="btn secondary small">Bring in a list</label>
       <input id="import" type="file" accept=".md,text/markdown,text/plain" class="sr-input">
       <p id="backup" hidden>It has been a while. You can save a copy with Export.</p>
     </footer>
@@ -105,7 +105,7 @@
       </fieldset>
       <label class="row"><input type="checkbox" name="backupNote"> Remind me to export a copy (off by default)</label>
       <fieldset id="tools-set"><legend>Tools (all off until you turn one on)</legend></fieldset>
-      <p class="hint">Motion is always off in Dehazer.</p>
+      <p class="hint">Motion is always off.</p>
       <button type="submit" class="primary" id="close-settings">Close</button>
     </form>
   </dialog>
