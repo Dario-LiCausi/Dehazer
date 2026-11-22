@@ -22,6 +22,8 @@ export function makeId() {
 }
 
 export function createStore(backend, opts = {}) {
+  // Without transact a failed second write could leave half a paste or two items at one place.
+  if (typeof backend?.transact !== 'function') throw new Error('createStore: the backend needs a transact method');
   const now = opts.now ?? (() => Date.now());
   const newId = opts.newId ?? makeId;
 
@@ -29,70 +31,74 @@ export function createStore(backend, opts = {}) {
   let chain = Promise.resolve();
   const serial = (fn) => { const run = chain.then(fn); chain = run.catch(() => {}); return run; };
 
+  // One read-then-write step runs inside one transaction when the backend can do that.
+  // Then two browser tabs cannot interleave and pick the same pos.
+  const atomic = (fn) => backend.transact(fn);
+
   async function list() {
     const items = await backend.getAll();
     return items.sort((a, b) => a.pos - b.pos);
   }
 
-  function add(text) { return serial(() => addNow(text)); }
-  async function addNow(text) {
+  function add(text) { return serial(() => atomic((b) => addNow(b, text))); }
+  const topPos = async (b) => (await b.getAll()).reduce((m, i) => Math.max(m, i.pos), 0);
+  async function addNow(b, text, pos) {
     const clean = String(text ?? '').trim().slice(0, MAX_TEXT);
     if (!clean) return null; // Empty capture is ignored, never an error.
-    const items = await backend.getAll();
-    const pos = items.reduce((m, i) => Math.max(m, i.pos), 0) + 1;
+    const at = pos ?? (await topPos(b)) + 1;
     const t = now();
-    const item = { id: newId(), text: clean, state: 'active', pos, created: t, updated: t };
-    await backend.put(item);
+    const item = { id: newId(), text: clean, state: 'active', pos: at, created: t, updated: t };
+    await b.put(item);
     return item;
   }
 
-  function setState(id, state) { return serial(() => setStateNow(id, state)); }
-  async function setStateNow(id, state) {
+  function setState(id, state) { return serial(() => atomic((b) => setStateNow(b, id, state))); }
+  async function setStateNow(b, id, state) {
     if (!STATES.includes(state)) throw new Error(`bad state: ${state}`);
-    const item = await backend.get(id);
+    const item = await b.get(id);
     if (!item) return null;
     const next = { ...item, state, updated: now() };
-    await backend.put(next);
+    await b.put(next);
     return next;
   }
 
   // remove returns the old item so the UI can offer undo.
-  function remove(id) { return serial(() => removeNow(id)); }
-  async function removeNow(id) {
-    const item = await backend.get(id);
+  function remove(id) { return serial(() => atomic((b) => removeNow(b, id))); }
+  async function removeNow(b, id) {
+    const item = await b.get(id);
     if (!item) return null;
-    await backend.delete(id);
+    await b.delete(id);
     return item;
   }
 
   // restore puts a removed item back at its old place (same pos).
-  function restore(item) { return serial(() => restoreNow(item)); }
-  async function restoreNow(item) {
-    if (!item || (await backend.get(item.id))) return null;
+  function restore(item) { return serial(() => atomic((b) => restoreNow(b, item))); }
+  async function restoreNow(b, item) {
+    if (!item || (await b.get(item.id))) return null;
     // If a newer item took this place, go to the end instead of sharing it (no tie, no hidden re-sort).
-    const all = await backend.getAll();
+    const all = await b.getAll();
     const pos = all.some((i) => i.pos === item.pos) ? all.reduce((m, i) => Math.max(m, i.pos), 0) + 1 : item.pos;
     const back = { ...item, pos, updated: now() };
-    await backend.put(back);
+    await b.put(back);
     return back;
   }
 
   // edit changes the text only. Place and state stay. Blank text changes nothing.
-  function edit(id, text) { return serial(() => editNow(id, text)); }
-  async function editNow(id, text) {
+  function edit(id, text) { return serial(() => atomic((b) => editNow(b, id, text))); }
+  async function editNow(b, id, text) {
     const clean = String(text ?? '').trim().slice(0, MAX_TEXT);
     if (!clean) return null;
-    const item = await backend.get(id);
+    const item = await b.get(id);
     if (!item) return null;
     const next = { ...item, text: clean, updated: now() };
-    await backend.put(next);
+    await b.put(next);
     return next;
   }
 
   // move swaps pos with the nearest item of the same state. The user is the only one who reorders.
-  function move(id, dir) { return serial(() => moveNow(id, dir)); }
-  async function moveNow(id, dir) {
-    const all = await list();
+  function move(id, dir) { return serial(() => atomic((b) => moveNow(b, id, dir))); }
+  async function moveNow(b, id, dir) {
+    const all = (await b.getAll()).sort((x, y) => x.pos - y.pos);
     const me = all.find((i) => i.id === id);
     if (!me) return false;
     const same = all.filter((i) => i.state === me.state);
@@ -100,24 +106,28 @@ export function createStore(backend, opts = {}) {
     const other = same[dir === 'up' ? at - 1 : at + 1];
     if (!other) return false;
     const t = now();
-    await backend.put({ ...me, pos: other.pos, updated: t });
-    await backend.put({ ...other, pos: me.pos, updated: t });
+    await b.put({ ...me, pos: other.pos, updated: t });
+    await b.put({ ...other, pos: me.pos, updated: t });
     return true;
   }
 
   // addMany saves several texts in order (paste).
-  function addMany(texts) { return serial(async () => {
+  // All lines of one paste go in one transaction: all saved or none.
+  function addMany(texts) { return serial(() => atomic(async (b) => {
     const out = [];
-    for (const t of texts) { const it = await addNow(t); if (it) out.push(it); }
+    let pos = await topPos(b); // read once, then count up: one read for the whole paste
+    for (const t of texts) { const it = await addNow(b, t, pos + 1); if (it) { pos++; out.push(it); } }
     return out;
-  }); }
+  })); }
 
   // importItems adds parsed lines ({id, text, state}) at the end, in file order.
   // An id that already exists is skipped, so importing the same file twice adds nothing.
-  function importItems(parsed) { return serial(() => importNow(parsed)); }
-  async function importNow(parsed) {
-    const have = new Set((await backend.getAll()).map((i) => i.id));
-    let pos = (await backend.getAll()).reduce((m, i) => Math.max(m, i.pos), 0);
+  // The whole import is one transaction: all added or none, so a retry cannot duplicate.
+  function importItems(parsed) { return serial(() => atomic((b) => importNow(b, parsed))); }
+  async function importNow(b, parsed) {
+    const all = await b.getAll();
+    const have = new Set(all.map((i) => i.id));
+    let pos = all.reduce((m, i) => Math.max(m, i.pos), 0);
     let added = 0; let skipped = 0;
     for (const p of parsed) {
       const text = String(p.text ?? '').trim().slice(0, MAX_TEXT);
@@ -125,7 +135,7 @@ export function createStore(backend, opts = {}) {
       const t = now();
       const id = p.id || newId();
       have.add(id);
-      await backend.put({ id, text, state: p.state, pos: ++pos, created: t, updated: t });
+      await b.put({ id, text, state: p.state, pos: ++pos, created: t, updated: t });
       added++;
     }
     return { added, skipped };
@@ -136,11 +146,40 @@ export function createStore(backend, opts = {}) {
 
 // Backend for tests and for browsers without IndexedDB (data is lost on reload).
 export function createMemoryBackend() {
-  const m = new Map();
+  let m = new Map();
+  let lock = Promise.resolve();
+  const copy = (src) => new Map([...src].map(([k, v]) => [k, { ...v }]));
+  // A view is bound to one map. A transaction view is closed when the transaction ends,
+  // like IndexedDB, so a callback that kept it cannot write later and skip the lock.
+  const view = (map, state = { open: true }) => {
+    const live = () => { if (!state.open) throw new Error('transaction finished'); return map; };
+    return {
+      async getAll() { return [...live().values()].map((i) => ({ ...i })); },
+      async get(id) { const i = live().get(id); return i ? { ...i } : undefined; },
+      async put(item) { live().set(item.id, { ...item }); },
+      async delete(id) { live().delete(id); },
+    };
+  };
   return {
-    async getAll() { return [...m.values()].map((i) => ({ ...i })); },
-    async get(id) { const i = m.get(id); return i ? { ...i } : undefined; },
-    async put(item) { m.set(item.id, { ...item }); },
-    async delete(id) { m.delete(id); },
+    // Plain reads and writes wait for a running transaction, like IndexedDB does.
+    async getAll() { await lock; return view(m).getAll(); },
+    async get(id) { await lock; return view(m).get(id); },
+    async put(item) { await lock; return view(m).put(item); },
+    async delete(id) { await lock; return view(m).delete(id); },
+    // Same job as an IndexedDB read-write transaction: one at a time, on a private copy,
+    // published only if fn finishes. If fn throws, nothing is kept.
+    transact(fn) {
+      const run = lock.then(async () => {
+        const work = copy(m);
+        const state = { open: true };
+        try {
+          const out = await fn(view(work, state));
+          m = work;
+          return out;
+        } finally { state.open = false; }
+      });
+      lock = run.catch(() => {});
+      return run;
+    },
   };
 }

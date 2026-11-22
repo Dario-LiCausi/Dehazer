@@ -27,7 +27,7 @@ Off by default (opt-in). A reminder can feel like nagging. Export stays one tap 
 Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, translations, soft time signals.
 
 ## Known limits from review
-- Data is saved in IndexedDB without one transaction per move. Two tabs at once can clash. One tab is the normal use.
+- Every change that reads and then writes (add, edit, move, restore, paste, import) runs inside one IndexedDB transaction. Two tabs at once cannot pick the same position, and a failed paste or import keeps nothing. Checked in a real browser with two connections: 30 of 30 and 40 of 40 positions were unique (the old code gave 15 of 30). A text with line breaks and a plain file import without ids can still produce a duplicate if you import the same file twice.
 - The preview runs on plain http inside a private VPN. A public copy must use https.
 - Export has no size limit but import stops at 20000 items.
 
