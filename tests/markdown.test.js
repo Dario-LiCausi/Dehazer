@@ -103,3 +103,14 @@ test('exactly MAX_IMPORT items is allowed; headers and lists in code fences are 
   const fenced = parseMarkdown('# Notes\n```\n<!-- dehazer-export v1 -->\n- [ ] example\n```\n- [ ] real <!-- z -->\n');
   assert.deepEqual(fenced.map((p) => [p.id, p.text]), [[null, 'real <!-- z -->']]);
 });
+
+test('makeId works without randomUUID (pages that are not secure contexts)', async () => {
+  const { makeId } = await import('../src/store.js');
+  const real = globalThis.crypto.randomUUID;
+  Object.defineProperty(globalThis.crypto, 'randomUUID', { value: undefined, configurable: true });
+  try {
+    const a = makeId(); const b = makeId();
+    assert.match(a, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+    assert.notEqual(a, b);
+  } finally { Object.defineProperty(globalThis.crypto, 'randomUUID', { value: real, configurable: true }); }
+});
