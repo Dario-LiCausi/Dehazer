@@ -2,7 +2,11 @@
 
 A free, open-source, local-first web app that helps ADHD and autistic adults **capture** a thought, **remember** it and **act** on it.
 
-**Status: early. Design only. No app yet.** See [docs/DESIGN.md](docs/DESIGN.md).
+**Status: early.** Capture, list, Next 5 and Markdown export and import work in the browser; install as an app comes later. See [docs/DESIGN.md](docs/DESIGN.md).
+
+## Screenshots
+![Home: capture box, Next 5 with one item marked Now, all items in the order added](docs/screens/home.png)
+![Phone width](docs/screens/phone.png)
 
 ## Three promises
 1. No account, no app backend, no tracking. Your data stays on your device.
