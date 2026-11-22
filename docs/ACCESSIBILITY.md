@@ -20,6 +20,11 @@ Plain words. What Dehazer does today, and how we check it.
 - We test by hand at 390, 820 and 1280 px wide, and with the keyboard only.
 - No automated axe run yet. It is on the [backlog](../BACKLOG.md).
 
+## Tools shelf
+- Tool panels are native dialogs: Esc closes, focus moves into the panel and returns to the Tools button.
+- Show this uses a visible label, large type that wraps (no sideways scroll at 390 px, Larger text size, dark mode) and no motion.
+- Tools are off by default, so people who do not want them never see them.
+
 ## What we do not know yet
 - No autistic or ADHD adult has tested this build. M4 in [DESIGN.md](DESIGN.md) will.
 - We have not tested with a screen reader on every system.

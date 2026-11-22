@@ -15,6 +15,7 @@
   <main>
     <header class="top">
       <h1>Dehazer</h1>
+      <button type="button" id="open-tools" class="quiet" hidden>Tools</button>
       <button type="button" id="open-settings" class="quiet">Settings</button>
     </header>
 
@@ -86,9 +87,36 @@
         <label><input type="radio" name="font" value="easy"> Easy-read font</label>
       </fieldset>
       <label class="row"><input type="checkbox" name="backupNote"> Remind me to export a copy (off by default)</label>
+      <fieldset id="tools-set"><legend>Tools (all off until you turn one on)</legend></fieldset>
       <p class="hint">Motion is always off in Dehazer.</p>
       <button type="submit" class="primary" id="close-settings">Close</button>
     </form>
+  </dialog>
+  <dialog id="tools-dialog" aria-labelledby="tools-h">
+    <h2 id="tools-h">Tools</h2>
+    <div id="tools-list" class="actions"></div>
+    <button type="button" id="tools-close" class="secondary">Close</button>
+  </dialog>
+
+  <dialog id="show-dialog" class="show" aria-labelledby="show-h">
+    <section id="show-edit">
+      <h2 id="show-h">Show this</h2>
+      <label for="show-text">Message to show</label>
+      <textarea id="show-text" rows="4" maxlength="500" autocomplete="off"></textarea>
+      <p class="hint">Not saved. It is cleared when you close this.</p>
+      <div class="actions">
+        <button type="button" id="show-go" class="primary">Show large</button>
+        <button type="button" id="show-close" class="secondary">Close</button>
+      </div>
+    </section>
+    <section id="show-view" hidden>
+      <p id="show-big" class="show-big" tabindex="-1"></p>
+      <div class="actions">
+        <button type="button" id="show-change" class="secondary">Change message</button>
+        <button type="button" id="show-turn" class="secondary">Their turn</button>
+        <button type="button" id="show-close2" class="secondary">Close</button>
+      </div>
+    </section>
   </dialog>
   <script type="module" src="src/main.js"></script>
 </body>

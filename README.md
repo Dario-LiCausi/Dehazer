@@ -9,6 +9,8 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 ![Phone width, light](docs/screens/phone.png)
 ![Phone width, dark](docs/screens/dark.png)
 ![Settings: colours, text size, font, backup reminder](docs/screens/settings.png)
+![Tools shelf in Settings: every tool is off until you turn it on](docs/screens/tools-shelf.png)
+![Show this: a message in very large type](docs/screens/show-this.png)
 ![The More row on one item: Edit, Move up, Move down, Delete](docs/screens/more.png)
 
 ## Three promises

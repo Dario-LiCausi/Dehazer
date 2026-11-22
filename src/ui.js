@@ -6,6 +6,7 @@ import { backupDue, readLastExport, writeLastExport } from './backup.js';
 import { splitLines, MAX_PASTE } from './paste.js';
 import { loadSettings, saveSettings, applySettings } from './settings.js';
 import { whatsNewDue, markSeen } from './whatsnew.js';
+import { mountTools } from './tools-ui.js';
 
 const MAX_FILE = 10 * 1024 * 1024; // bytes
 
@@ -201,6 +202,8 @@ export function mount(doc, store, env = {}) {
     render();
   });
   sform.addEventListener('submit', () => { if (!dlg.showModal) dlg.removeAttribute('open'); });
+
+  mountTools(doc, storage);
 
   // "What changed": once after an update, never for a new user.
   if (whatsNewDue(storage)) {

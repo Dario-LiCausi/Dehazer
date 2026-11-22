@@ -8,6 +8,8 @@ Not built yet. Ordered by when we think about them, not by promise.
 - Translations (a messages file per language).
 - "Keep the old layout for one release" switch (the What changed promise in DESIGN.md 3b).
 
+- More tools for the shelf, one per release (each off by default): a call panel, a doctor sheet, a return point.
+
 ## Later, only if testers ask
 - Soft time signals (chime or shrinking bar, off by default).
 - Search.

@@ -23,6 +23,12 @@ One page. What is built, what waits, and why. Date: 2026-11-22. Sources: [RESEAR
 ## Backup reminder
 Off by default (opt-in). A reminder can feel like nagging. Export stays one tap away at the bottom.
 
+## Tools shelf (v0.3.0)
+- Every tool is off until the user turns it on in Settings. With all tools off, no button, box or link moves; a real-browser check at 390, 820 and 1280 px showed the same boxes as v0.2.0.
+- A Tools button appears only when a tool is on. It sits just before Settings, so Settings keeps its place.
+- First tool: Show this. A typed message in very large type, for a day when speech is hard. It is never saved: it lives in memory and is cleared when the panel closes. "Their turn" opens an empty box so the other person can type back.
+- One tool per release. No sound, no motion, no network.
+
 ## Waits (see [BACKLOG.md](../BACKLOG.md))
 Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, translations, soft time signals.
 
@@ -32,6 +38,6 @@ Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, tr
 - Export has no size limit but import stops at 20000 items.
 
 ## Checks run
-- `npm test` (64 tests, including contrast for both themes).
+- `npm test` (82 tests, including contrast for both themes).
 - Browser at 390, 820 and 1280 px, light and dark: no sideways scroll, no console errors.
 - Keyboard only: Tab order is Settings, capture, Save, Now card, views, rows.

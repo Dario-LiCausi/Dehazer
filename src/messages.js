@@ -72,3 +72,18 @@ Object.assign(MSG, {
 });
 MSG.pasteTooMany = 'That is more than 100 lines. Nothing was saved. Your text is still in the box.';
 MSG.pasteTooLong = 'One line is longer than 2000 characters. Nothing was saved. Your text is still in the box.';
+
+// M5: Tools shelf. Every tool is off until the user turns it on.
+Object.assign(MSG, {
+  toolsButton: 'Tools',
+  toolsTitle: 'Tools',
+  toolsSetLegend: 'Tools (all off until you turn one on)',
+  showTitle: 'Show this',
+  showLabel: 'Message to show',
+  showGo: 'Show large',
+  showChange: 'Change message',
+  showTurn: 'Their turn',
+  showNote: 'Not saved. It is cleared when you close this.',
+  showTurnLabel: 'Message from the other person',
+});
+MSG.newBody = 'New: Tools, off until you turn one on in Settings, and a first tool, Show this. Nothing else moved.';

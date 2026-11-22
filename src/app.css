@@ -65,3 +65,10 @@ input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; acc
   :root { --muted: var(--fg); --border: var(--fg); --line: var(--fg); }
   button, .btn { border-width: 3px; }
 }
+
+/* M5: Tools shelf. Nothing here shows until a tool is turned on. */
+dialog.show { max-width: none; width: calc(100% - 1rem); }
+.show-big { font-size: clamp(2rem, 9vw, 5rem); line-height: 1.2; font-weight: 700; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 var(--space-4); }
+#open-tools[hidden], #show-view[hidden], #show-edit[hidden] { display: none; }
+#tools-set label, #tools-set .hint { display: block; }
+#show-big:focus { outline: none; }
