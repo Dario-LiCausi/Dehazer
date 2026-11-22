@@ -51,14 +51,17 @@ export function mount(doc, store, env = {}) {
     ul.replaceChildren(...shown.map((it, n) => row(it, n, shown.length)));
     empty.textContent = { active: MSG.nowEmpty, later: MSG.laterEmpty, done: MSG.doneEmpty }[view];
     empty.hidden = shown.length > 0;
-    for (const b of doc.querySelectorAll('[data-view]')) b.setAttribute('aria-pressed', String(b.dataset.view === view));
+    for (const b of doc.querySelectorAll('[data-view]')) {
+      b.setAttribute('aria-pressed', String(b.dataset.view === view));
+      if (b.dataset.view === 'later') b.textContent = `${MSG.viewLater} (${items.filter((i) => i.state === 'later').length})`; // quiet count, no badge, no colour
+    }
 
     // First time there is data: start the week now, so the note never greets a new user.
     if (items.length && !readLastExport(storage)) writeLastExport(storage, now());
     backup.hidden = !(settings.backupNote && backupDue(readLastExport(storage), now(), items.length));
   }
 
-  // State change with a 10 s undo that puts the old state back.
+  // State change with a 30 s undo that puts the old state back.
   async function changeState(item, state, msg) {
     const before = item.state;
     await store.setState(item.id, state);

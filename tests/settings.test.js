@@ -8,11 +8,11 @@ const mem = () => { const m = new Map(); return { getItem: (k) => (m.has(k) ? m.
 test('defaults when nothing saved', () => { assert.deepEqual(loadSettings(mem()), DEFAULTS); });
 test('defaults hold calm, no reminders pushed', () => {
   assert.equal(DEFAULTS.theme, 'system'); assert.equal(DEFAULTS.size, 'normal');
-  assert.equal(DEFAULTS.font, 'system'); assert.equal(DEFAULTS.backupNote, true);
+  assert.equal(DEFAULTS.font, 'system'); assert.equal(DEFAULTS.backupNote, false); // opt-in: a reminder can feel like nagging
 });
 test('save then load round trip', () => {
-  const s = mem(); saveSettings(s, { ...DEFAULTS, theme: 'dark', size: 'large', font: 'easy', backupNote: false });
-  assert.deepEqual(loadSettings(s), { theme: 'dark', size: 'large', font: 'easy', backupNote: false });
+  const s = mem(); saveSettings(s, { ...DEFAULTS, theme: 'dark', size: 'large', font: 'easy', backupNote: true });
+  assert.deepEqual(loadSettings(s), { theme: 'dark', size: 'large', font: 'easy', backupNote: true });
 });
 test('bad stored values fall back to defaults', () => {
   const s = mem(); s.setItem('dehazer.settings', '{"theme":"pink","size":9,"font":"x","backupNote":"yes"}');

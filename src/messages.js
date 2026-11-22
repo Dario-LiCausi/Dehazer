@@ -13,7 +13,7 @@ export const MSG = {
   saveButton: 'Save',
   storageFallback: 'Your browser cannot keep data here. Items vanish when you close this page.',
 };
-export const UNDO_MS = 10000;
+export const UNDO_MS = 30000;
 Object.assign(MSG, {
   exported: 'Download started. Check your downloads.',
   exportButton: 'Export',
@@ -35,7 +35,7 @@ MSG.saveFailed = 'Could not save that. Your text is still in the box.';
 Object.assign(MSG, {
   doneButton: 'Done',
   notNowButton: 'Not now',
-  bringBack: 'Bring back',
+  bringBack: 'Back to list',
   editButton: 'Edit',
   saveEdit: 'Save',
   upButton: 'Move up',
@@ -63,7 +63,7 @@ Object.assign(MSG, {
   sizeLabel: 'Text size', sizeNormal: 'Normal', sizeLarge: 'Large', sizeLarger: 'Larger',
   fontLabel: 'Font', fontSystem: 'Device font', fontEasy: 'Easy-read font',
   motionNote: 'Motion is always off in Dehazer.',
-  backupToggle: 'Remind me to export a copy',
+  backupToggle: 'Remind me to export a copy (off by default)',
   settingsSaved: 'Setting kept on this device.',
   newTitle: 'What changed',
   newBody: 'New in this version: a Now card, Edit, Move up and down, a Later list, Settings and a copy you can install. Your items are the same.',
