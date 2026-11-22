@@ -11,6 +11,7 @@ if (!hasIdb) {
 }
 askPersist();
 mount(document, store, {
+  win: window,
   storage: (() => { try { return window.localStorage; } catch { return undefined; } })(),
   download(name, text) {
     const url = URL.createObjectURL(new Blob([text], { type: 'text/markdown' }));
@@ -19,3 +20,8 @@ mount(document, store, {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   },
 });
+
+// Offline copy. Needs https or localhost: on plain http it quietly does nothing.
+if ('serviceWorker' in navigator && window.isSecureContext) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}

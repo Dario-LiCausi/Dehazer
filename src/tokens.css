@@ -1,0 +1,17 @@
+/* Design tokens. Change colours and sizes here only. Contrast is tested (tests/contrast.test.js). No pure red. */
+:root {
+  --bg: #f7f5f0; --card: #ffffff; --fg: #26292e; --muted: #50565d; --border: #7d838a; --line: #d8d4ca;
+  --accent: #2f5d62; --accent-fg: #ffffff; --focus: #1a4fd6;
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem; --space-6: 2rem;
+  --text-s: .9375rem; --text-m: 1.0625rem; --text-l: 1.375rem; --text-xl: 1.75rem;
+  --radius: 10px; --touch: 2.75rem; /* 44 px */
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --scale: 1;
+}
+:root[data-theme="dark"] {
+  --bg: #1b1e21; --card: #25292d; --fg: #ececec; --muted: #b3b8bd; --border: #7f868d; --line: #3a4046;
+  --accent: #8fc1c6; --accent-fg: #14282a; --focus: #9db8ff;
+}
+:root[data-size="large"] { --scale: 1.15; }
+:root[data-size="larger"] { --scale: 1.3; }
+:root[data-font="easy"] { --font: "Atkinson Hyperlegible", system-ui, sans-serif; }

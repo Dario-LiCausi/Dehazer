@@ -70,6 +70,40 @@ export function createStore(backend, opts = {}) {
     return item;
   }
 
+  // edit changes the text only. Place and state stay. Blank text changes nothing.
+  async function edit(id, text) {
+    const clean = String(text ?? '').trim().slice(0, MAX_TEXT);
+    if (!clean) return null;
+    const item = await backend.get(id);
+    if (!item) return null;
+    const next = { ...item, text: clean, updated: now() };
+    await backend.put(next);
+    return next;
+  }
+
+  // move swaps pos with the nearest item of the same state. The user is the only one who reorders.
+  function move(id, dir) { return serial(() => moveNow(id, dir)); }
+  async function moveNow(id, dir) {
+    const all = await list();
+    const me = all.find((i) => i.id === id);
+    if (!me) return false;
+    const same = all.filter((i) => i.state === me.state);
+    const at = same.findIndex((i) => i.id === id);
+    const other = same[dir === 'up' ? at - 1 : at + 1];
+    if (!other) return false;
+    const t = now();
+    await backend.put({ ...me, pos: other.pos, updated: t });
+    await backend.put({ ...other, pos: me.pos, updated: t });
+    return true;
+  }
+
+  // addMany saves several texts in order (paste).
+  function addMany(texts) { return serial(async () => {
+    const out = [];
+    for (const t of texts) { const it = await addNow(t); if (it) out.push(it); }
+    return out;
+  }); }
+
   // importItems adds parsed lines ({id, text, state}) at the end, in file order.
   // An id that already exists is skipped, so importing the same file twice adds nothing.
   function importItems(parsed) { return serial(() => importNow(parsed)); }
@@ -89,7 +123,7 @@ export function createStore(backend, opts = {}) {
     return { added, skipped };
   }
 
-  return { list, add, setState, remove, restore, importItems };
+  return { list, add, addMany, edit, move, setState, remove, restore, importItems };
 }
 
 // Backend for tests and for browsers without IndexedDB (data is lost on reload).

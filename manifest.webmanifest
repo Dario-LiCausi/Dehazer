@@ -1,0 +1,11 @@
+{
+  "name": "Dehazer",
+  "short_name": "Dehazer",
+  "description": "A calm place to capture a thought and see what is next.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#2f5d62",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

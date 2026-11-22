@@ -1,37 +1,95 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light" data-size="normal" data-font="system">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#2f5d62">
   <title>Dehazer</title>
-  <link rel="icon" href="data:,">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="src/tokens.css">
   <link rel="stylesheet" href="src/app.css">
 </head>
 <body>
   <main>
-    <h1>Dehazer</h1>
+    <header class="top">
+      <h1>Dehazer</h1>
+      <button type="button" id="open-settings" class="quiet">Settings</button>
+    </header>
+
     <form id="capture" autocomplete="off">
       <label for="text">Capture a thought</label>
-      <input id="text" name="text" type="text" maxlength="2000" placeholder="What is on your mind?">
-      <button type="submit">Save</button>
+      <textarea id="text" name="text" rows="2" maxlength="20000" placeholder="What is on your mind?"></textarea>
+      <p class="hint" id="paste-hint">Paste a list to add one item per line.</p>
+      <button type="submit" class="primary">Save</button>
     </form>
     <p id="status" role="status" aria-live="polite"></p>
     <p id="notice" hidden></p>
-    <section aria-labelledby="next-h">
-      <h2 id="next-h">Next 5</h2>
-      <ol id="next5"></ol>
-      <p id="next-empty" hidden>Nothing waiting. Capture a thought above.</p>
+    <section id="whatsnew" class="card" hidden aria-labelledby="wn-h">
+      <h2 id="wn-h">What changed</h2>
+      <p id="wn-body"></p>
+      <button type="button" id="wn-ok" class="secondary">Got it</button>
     </section>
-    <div id="tools">
-      <button type="button" id="export">Export</button>
-      <label for="import">Import a Markdown file</label>
-      <input id="import" type="file" accept=".md,text/markdown,text/plain">
-    </div>
-    <p id="backup" hidden>It has been a while. You can save a copy with Export.</p>
-    <h2>All items</h2>
-    <ul id="items" aria-label="Your items"></ul>
-    <p id="empty">Nothing here yet.</p>
+
+    <section class="now-card card" aria-labelledby="now-h">
+      <h2 id="now-h">Now</h2>
+      <p id="now-text" class="now-text"></p>
+      <p id="now-empty" hidden>Nothing to do right now. That is fine.</p>
+      <div class="actions" id="now-actions">
+        <button type="button" id="now-done" class="primary">Done</button>
+        <button type="button" id="now-later" class="secondary">Not now</button>
+      </div>
+    </section>
+
+    <section aria-labelledby="next-h" id="next-section">
+      <h2 id="next-h">Up next</h2>
+      <ol id="next5"></ol>
+      <p id="next-empty" hidden>Nothing else waiting.</p>
+    </section>
+
+    <section aria-labelledby="all-h">
+      <h2 id="all-h">All items</h2>
+      <div class="views" role="group" aria-label="Show">
+        <button type="button" data-view="active" aria-pressed="true">To do</button>
+        <button type="button" data-view="later" aria-pressed="false">Later</button>
+        <button type="button" data-view="done" aria-pressed="false">Done</button>
+      </div>
+      <ul id="items" aria-label="Your items"></ul>
+      <p id="empty">Nothing here yet.</p>
+    </section>
+
+    <footer id="tools">
+      <h2 class="sr">Backup</h2>
+      <button type="button" id="export" class="secondary small">Export</button>
+      <label for="import" class="btn secondary small">Import a Markdown file</label>
+      <input id="import" type="file" accept=".md,text/markdown,text/plain" class="sr-input">
+      <p id="backup" hidden>It has been a while. You can save a copy with Export.</p>
+    </footer>
   </main>
+
+  <dialog id="settings" aria-labelledby="set-h">
+    <form method="dialog" id="settings-form">
+      <h2 id="set-h">Settings</h2>
+      <fieldset><legend>Colours</legend>
+        <label><input type="radio" name="theme" value="system"> Same as my device</label>
+        <label><input type="radio" name="theme" value="light"> Light</label>
+        <label><input type="radio" name="theme" value="dark"> Dark</label>
+      </fieldset>
+      <fieldset><legend>Text size</legend>
+        <label><input type="radio" name="size" value="normal"> Normal</label>
+        <label><input type="radio" name="size" value="large"> Large</label>
+        <label><input type="radio" name="size" value="larger"> Larger</label>
+      </fieldset>
+      <fieldset><legend>Font</legend>
+        <label><input type="radio" name="font" value="system"> Device font</label>
+        <label><input type="radio" name="font" value="easy"> Easy-read font</label>
+      </fieldset>
+      <label class="row"><input type="checkbox" name="backupNote"> Remind me to export a copy</label>
+      <p class="hint">Motion is always off in Dehazer.</p>
+      <button type="submit" class="primary" id="close-settings">Close</button>
+    </form>
+  </dialog>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>

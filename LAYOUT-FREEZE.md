@@ -21,3 +21,6 @@ Many users need the app to stay the same. This file protects that.
 
 ## Not frozen
 Bug fixes that change no position, colour or motion. Fresh mode is opt-in. It may change colours and icons, never positions. Its changes also need release notes.
+
+## Baseline
+The layout in the v0.2 screenshots (`docs/screens/`) is the frozen baseline: capture box, Now card, Up next, All items, backup row. Settings live in a dialog opened from the top right.

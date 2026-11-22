@@ -2,11 +2,14 @@
 
 A free, open-source, local-first web app that helps ADHD and autistic adults **capture** a thought, **remember** it and **act** on it.
 
-**Status: early.** Capture, list, Next 5 and Markdown export and import work in the browser; install as an app comes later. See [docs/DESIGN.md](docs/DESIGN.md).
+**Status: early.** Capture, a Now card, Up next, Later, edit, move up and down, Settings, Markdown export and import, and offline use work in the browser. See [docs/DESIGN.md](docs/DESIGN.md) and [docs/UX-DECISIONS.md](docs/UX-DECISIONS.md).
 
 ## Screenshots
-![Home: capture box, Next 5 with one item marked Now, all items in the order added](docs/screens/home.png)
-![Phone width](docs/screens/phone.png)
+![Home on a wide screen: capture box, Now card, Up next, all items](docs/screens/home.png)
+![Phone width, light](docs/screens/phone.png)
+![Phone width, dark](docs/screens/dark.png)
+![Settings: colours, text size, font, backup reminder](docs/screens/settings.png)
+![The More row on one item: Edit, Move up, Move down, Delete](docs/screens/more.png)
 
 ## Three promises
 1. No account, no app backend, no tracking. Your data stays on your device.
@@ -23,6 +26,9 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 - How to help (code and non-code): [CONTRIBUTING.md](CONTRIBUTING.md)
 - Layout and motion rules: [LAYOUT-FREEZE.md](LAYOUT-FREEZE.md)
 - Research behind the design: [docs/RESEARCH.md](docs/RESEARCH.md)
+- What is built, what waits, and why: [docs/UX-DECISIONS.md](docs/UX-DECISIONS.md), [BACKLOG.md](BACKLOG.md)
+- Access notes: [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md)
+- Font: Atkinson Hyperlegible, SIL Open Font Licence ([fonts/OFL-LICENSE.txt](fonts/OFL-LICENSE.txt))
 
 ## Licence
 MIT. See [LICENSE](LICENSE).
