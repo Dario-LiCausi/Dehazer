@@ -53,3 +53,14 @@ test('addMany saves each line in order and ignores blanks', async () => {
   assert.equal(r.length, 3);
   assert.deepEqual(await texts(s), ['x', 'y', 'z']);
 });
+
+test('undo of a deleted last item does not tie with a newer item', async () => {
+  const s = make();
+  await s.add('a'); const b = await s.add('b');
+  const gone = await s.remove(b.id);
+  await s.add('c'); // takes the place b had
+  await s.restore(gone);
+  const all = await s.list();
+  assert.equal(new Set(all.map((i) => i.pos)).size, all.length);
+  assert.deepEqual(all.map((i) => i.text), ['a', 'c', 'b']);
+});

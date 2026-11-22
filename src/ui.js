@@ -1,9 +1,9 @@
 // Draws the page. Never re-sorts: it shows what store.list() returns. The user reorders with Move up / Move down.
 import { MSG, UNDO_MS } from './messages.js';
-import { nextFive } from './store.js';
+import { nextFive, MAX_TEXT } from './store.js';
 import { toMarkdown, parseMarkdown, MAX_IMPORT } from './markdown.js';
 import { backupDue, readLastExport, writeLastExport } from './backup.js';
-import { splitLines } from './paste.js';
+import { splitLines, MAX_PASTE } from './paste.js';
 import { loadSettings, saveSettings, applySettings } from './settings.js';
 import { whatsNewDue, markSeen } from './whatsnew.js';
 
@@ -17,7 +17,7 @@ export function mount(doc, store, env = {}) {
   const form = $('capture'); const input = $('text'); const status = $('status');
   const ul = $('items'); const empty = $('empty');
   const next5 = $('next5'); const nextEmpty = $('next-empty'); const backup = $('backup');
-  let undoTimer; let view = 'active';
+  let undoTimer; let view = 'active'; let editing = false;
   let settings = loadSettings(storage);
   const win = env.win ?? doc.defaultView;
   if (win) applySettings(win, settings);
@@ -30,8 +30,9 @@ export function mount(doc, store, env = {}) {
     return b;
   }
 
-  async function render() {
+  async function render(passive = false) {
     const items = await store.list();
+    if (passive && editing) return; // a background redraw must never replace an open edit
     const next = nextFive(items);
 
     // Now card: one item, same place every day.
@@ -105,9 +106,9 @@ export function mount(doc, store, env = {}) {
   function startEdit(li, span, item) {
     const f = doc.createElement('input');
     f.type = 'text'; f.value = item.text; f.maxLength = 2000; f.setAttribute('aria-label', MSG.editButton);
-    let finished = false;
+    let finished = false; editing = true;
     const finish = async (save) => {
-      if (finished) return; finished = true;
+      if (finished) return; finished = true; editing = false;
       if (save && f.value.trim() && f.value.trim() !== item.text) { await store.edit(item.id, f.value); say(MSG.edited); }
       await render();
       [...ul.children].find((x) => x.dataset.id === item.id)?.querySelector('summary')?.focus();
@@ -138,6 +139,8 @@ export function mount(doc, store, env = {}) {
     input.value = '';
     try {
       const lines = splitLines(typed);
+      if (lines.length > MAX_PASTE) { input.value = typed; say(MSG.pasteTooMany); input.focus(); return; }
+      if (lines.some((l) => l.length > MAX_TEXT)) { input.value = typed; say(MSG.pasteTooLong); input.focus(); return; }
       const saved = await store.addMany(lines);
       if (saved.length) { say(saved.length === 1 ? MSG.saved : MSG.added(saved.length)); await render(); }
     } catch { input.value = input.value ? `${typed} ${input.value}` : typed; say(MSG.saveFailed); }
@@ -203,7 +206,7 @@ export function mount(doc, store, env = {}) {
     $('wn-ok').addEventListener('click', () => { markSeen(storage); $('whatsnew').hidden = true; input.focus(); });
   }
 
-  doc.addEventListener('visibilitychange', () => { if (!doc.hidden) render(); });
+  doc.addEventListener('visibilitychange', () => { if (!doc.hidden) render(true); }); // never redraw under an open edit
 
   return render();
 }

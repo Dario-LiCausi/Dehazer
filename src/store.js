@@ -46,7 +46,8 @@ export function createStore(backend, opts = {}) {
     return item;
   }
 
-  async function setState(id, state) {
+  function setState(id, state) { return serial(() => setStateNow(id, state)); }
+  async function setStateNow(id, state) {
     if (!STATES.includes(state)) throw new Error(`bad state: ${state}`);
     const item = await backend.get(id);
     if (!item) return null;
@@ -56,7 +57,8 @@ export function createStore(backend, opts = {}) {
   }
 
   // remove returns the old item so the UI can offer undo.
-  async function remove(id) {
+  function remove(id) { return serial(() => removeNow(id)); }
+  async function removeNow(id) {
     const item = await backend.get(id);
     if (!item) return null;
     await backend.delete(id);
@@ -64,14 +66,20 @@ export function createStore(backend, opts = {}) {
   }
 
   // restore puts a removed item back at its old place (same pos).
-  async function restore(item) {
+  function restore(item) { return serial(() => restoreNow(item)); }
+  async function restoreNow(item) {
     if (!item || (await backend.get(item.id))) return null;
-    await backend.put({ ...item, updated: now() });
-    return item;
+    // If a newer item took this place, go to the end instead of sharing it (no tie, no hidden re-sort).
+    const all = await backend.getAll();
+    const pos = all.some((i) => i.pos === item.pos) ? all.reduce((m, i) => Math.max(m, i.pos), 0) + 1 : item.pos;
+    const back = { ...item, pos, updated: now() };
+    await backend.put(back);
+    return back;
   }
 
   // edit changes the text only. Place and state stay. Blank text changes nothing.
-  async function edit(id, text) {
+  function edit(id, text) { return serial(() => editNow(id, text)); }
+  async function editNow(id, text) {
     const clean = String(text ?? '').trim().slice(0, MAX_TEXT);
     if (!clean) return null;
     const item = await backend.get(id);

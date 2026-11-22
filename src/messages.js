@@ -70,3 +70,5 @@ Object.assign(MSG, {
   gotIt: 'Got it',
   installNote: 'Works offline once this page has loaded.',
 });
+MSG.pasteTooMany = 'That is more than 100 lines. Nothing was saved. Your text is still in the box.';
+MSG.pasteTooLong = 'One line is longer than 2000 characters. Nothing was saved. Your text is still in the box.';
