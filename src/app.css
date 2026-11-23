@@ -6,11 +6,11 @@
 
 * { box-sizing: border-box; animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 html { font-size: calc(100% * var(--scale)); }
-body { margin: 0; background: var(--bg); color: var(--fg); font: var(--text-m)/1.5 var(--font); overflow-wrap: anywhere; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: var(--text-m)/var(--lh) var(--font); overflow-wrap: anywhere; }
 main { max-width: 38rem; margin: 0 auto; padding: var(--space-5) var(--space-3); }  /* top and bottom are larger than the sides */
 .top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
-h1 { font-size: var(--text-xl); margin: 0; line-height: 1.2; }
-h2 { font-size: var(--text-l); margin: var(--space-5) 0 var(--space-2); line-height: 1.2; }
+h1 { font-size: var(--text-xl); margin: 0; line-height: var(--lh-h); }
+h2 { font-size: var(--text-l); margin: var(--space-5) 0 var(--space-2); line-height: var(--lh-h); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .sr-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
 .hint, #status, #notice, #empty, #backup { color: var(--muted); font-size: var(--text-s); margin: var(--space-1) 0; }
@@ -22,10 +22,10 @@ textarea, input[type="text"] { font: inherit; width: 100%; padding: var(--space-
   border: 1.5px solid var(--border); border-radius: var(--radius-btn); min-height: var(--touch); resize: vertical; }
 
 button, .btn { font: inherit; font-weight: 600; min-height: var(--touch); min-width: var(--touch); padding: 0 var(--space-4);
-  border: 1.5px solid var(--border); border-radius: var(--radius-btn); background: var(--line); color: var(--fg);
+  border: 1.5px solid var(--border); border-radius: var(--radius-btn); background: var(--fill); color: var(--fg);
   cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-button.secondary, .btn.secondary { background: var(--line); color: var(--fg); border-color: var(--accent); }
+button.secondary, .btn.secondary { background: var(--fill); color: var(--fg); border-color: var(--accent); }
 button.quiet { background: transparent; border-color: transparent; text-decoration: underline; }
 button.small, .btn.small { font-weight: 400; font-size: var(--text-s); }
 button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
@@ -58,12 +58,14 @@ dialog h2 { margin-top: 0; }
 fieldset { border: 1px solid var(--border); border-radius: var(--radius); margin: 0 0 var(--space-3); padding: var(--space-2) var(--space-3); }
 fieldset label, label.row { display: flex; align-items: center; gap: var(--space-2); font-weight: 400; min-height: var(--touch); }
 input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; accent-color: var(--accent); }
-@media (max-width: 420px) { .actions button { flex: 1 1 8rem; } #items li .actions { flex: 0 0 auto; flex-wrap: nowrap; } #items li .actions button { flex: 0 0 auto; padding: 0 var(--space-3); } }
+@media (max-width: 420px) { .actions button { flex: 1 1 8rem; } }
+@media (max-width: 420px) { :root:not([data-look="plain"]):not([data-look="v06"]) #items li .actions { flex: 0 0 auto; } :root:not([data-look="plain"]):not([data-look="v06"]) #items li .actions button { flex: 0 0 auto; padding: 0 var(--space-3); } }
 
 /* Device asks for more contrast: stronger borders and muted text. */
 @media (prefers-contrast: more) {
-  :root { --muted: var(--fg); --border: var(--fg); --line: var(--fg); }
-  button, .btn { border-width: 3px; }
+  :root, :root:root[data-theme][data-look] { --muted: var(--fg); --border: var(--fg); --line: var(--fg); }
+  button, .btn, :root:root[data-look] button, :root:root[data-look] .btn { border-width: 3px; }
+  :root:root[data-look] textarea, :root:root[data-look] input[type="text"] { border-width: 3px; }
 }
 
 /* v0.6 memo kinds and the warm look. The Plain look keeps the v0.5 shapes: tints are plain cards there. */
@@ -109,8 +111,8 @@ input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; acc
 :root:not([data-look="plain"]):not([data-look="v06"]) .next-card h2 .icon { color: var(--next-edge); }
 :root:not([data-look="plain"]):not([data-look="v06"]) .icon { width: 1.1em; height: 1.1em; }
 /* List rows: Done is a quiet tint, Not now is text only, so two buttons side by side never look the same. */
-:root:not([data-look="plain"]) #items li .actions > button:nth-child(2) { background: transparent; border-color: transparent; color: var(--muted); }
-:root:not([data-look="plain"]) details.more .actions button { background: transparent; }
+:root:not([data-look="plain"]):not([data-look="v06"]) #items li .actions > button:nth-child(2) { background: transparent; border-color: transparent; color: var(--muted); }
+:root:not([data-look="plain"]):not([data-look="v06"]) details.more .actions button { background: transparent; }
 :root[data-look="v06"] .cue-card, :root[data-look="v06"] .now-card, :root[data-look="v06"] .next-card { border-left: var(--edge-w) solid var(--cue-edge); }
 :root[data-look="v06"] .now-card { border-left-color: var(--now-edge); }
 :root[data-look="v06"] .next-card { border-left-color: var(--next-edge); }
@@ -118,7 +120,7 @@ input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; acc
 :root[data-look="v06"] textarea, :root[data-look="v06"] input[type="text"] { border-width: 2px; }
 :root[data-look="plain"] button, :root[data-look="plain"] .btn { background: var(--card); border-width: 2px; }
 :root[data-look="plain"] textarea, :root[data-look="plain"] input[type="text"] { border-width: 2px; }
-:root[data-look="plain"] main { padding: var(--space-4); }
+:root[data-look="plain"] main, :root[data-look="v06"] main { padding: var(--space-4); }
 
 /* M5: Tools shelf. Nothing here shows until a tool is turned on. */
 dialog.show { max-width: none; width: calc(100% - 1rem); }

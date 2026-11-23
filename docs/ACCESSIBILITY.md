@@ -34,7 +34,7 @@ Plain words. What Dehazer does today, and how we check it.
 Found a barrier? Open an issue with the label `nd-review`.
 
 ## v0.6 additions
-- The Task / Cue switch is a group labelled "Kind". Each button uses `aria-pressed`. The Save button text follows the choice ("Save task", "Save cue").
+- The Task / Cue switch is a group labelled "Type". Each button uses `aria-pressed`. The Save button text follows the choice ("Save task", "Save cue").
 - The Cue card is a section with the heading "Remember". Its Drop button has a visible label. The undo link sits in the status line, which is a polite live region.
 - Icons and the mascot are `aria-hidden` and sit beside text. Colour is never the only signal: each coloured card has its own heading.
 - Contrast: every card tint holds 4.5:1 for text and muted text, and 3:1 for the left edge, in light, dark and Plain (tests/contrast.test.js).

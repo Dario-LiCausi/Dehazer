@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f5ead8">
+  <meta name="theme-color" content="#f5ead8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1a16" media="(prefers-color-scheme: dark)">
   <title>Dehazer</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
@@ -75,7 +76,7 @@
     <footer id="tools">
       <h2 class="sr">Backup</h2>
       <button type="button" id="export" class="secondary small">Export</button>
-      <label for="import" class="btn secondary small">Bring in a list</label>
+      <label for="import" class="btn secondary small">Import a list</label>
       <input id="import" type="file" accept=".md,text/markdown,text/plain" class="sr-input">
       <p id="backup" hidden>It has been a while. You can save a copy with Export.</p>
     </footer>

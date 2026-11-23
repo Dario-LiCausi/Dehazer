@@ -26,7 +26,7 @@ const PAIRS = [
   ['fg', 'next-bg', 4.5], ['muted', 'next-bg', 4.5], ['next-edge', 'next-bg', 3],
   ['accent-fg', 'accent', 4.5], ['accent', 'cue-bg', 3], ['accent', 'now-bg', 3], ['accent', 'next-bg', 3],
   ['focus', 'cue-bg', 3], ['focus', 'now-bg', 3], ['focus', 'next-bg', 3],
-  ['border', 'cue-bg', 3], ['border', 'now-bg', 3], ['border', 'next-bg', 3],
+  ['fg', 'fill', 4.5], ['accent', 'fill', 3], ['border', 'cue-bg', 3], ['border', 'now-bg', 3], ['border', 'next-bg', 3],
 ];
 for (const [name, sel] of [['light', ':root {'], ['dark', ':root[data-theme="dark"] {'],
   ['v0.6 light', ':root[data-look="v06"][data-theme="light"] {'], ['v0.6 dark', ':root[data-look="v06"][data-theme="dark"] {'],
