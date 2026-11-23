@@ -28,13 +28,23 @@ export function pickCue(items, now) {
 // Pause all cues. mode: off | week | month | until (until the user turns it back on).
 // since = the time the pause was chosen. While paused no cue is picked and none is marked shown,
 // so the schedule waits. After the pause the due cues come back one at a time, as before.
+// A timed pause ends N calendar days later at the same clock time, so "1 week" is a full week.
 export const PAUSE_DAYS = { week: 7, month: 30 };
 export function effectivePause(mode, since, now) {
   if (mode === 'until') return 'until';
   const days = PAUSE_DAYS[mode];
   if (!days || !since) return 'off';
-  const s = startOfDay(since);
-  const end = new Date(s.getFullYear(), s.getMonth(), s.getDate() + days).getTime();
+  if (since > now + 86400000) return 'off'; // more than a day in the future: the clock was changed or the value is wrong
+  const s = new Date(since);
+  const end = new Date(s.getFullYear(), s.getMonth(), s.getDate() + days, s.getHours(), s.getMinutes(), s.getSeconds()).getTime();
   return now < end ? mode : 'off';
 }
 export const cuesPaused = (mode, since, now) => effectivePause(mode, since, now) !== 'off';
+
+// The user picked a pause choice in Settings. Returns the two settings to store.
+// Picking what is already in force keeps the start time. Other settings never call this.
+export function applyPauseChoice(s, value, now) {
+  const mode = ['off', 'week', 'month', 'until'].includes(value) ? value : 'off';
+  if (mode === effectivePause(s.cuesPause, s.cuesPauseAt, now)) return { cuesPause: s.cuesPause, cuesPauseAt: s.cuesPauseAt };
+  return { cuesPause: mode, cuesPauseAt: mode === 'off' ? 0 : now };
+}

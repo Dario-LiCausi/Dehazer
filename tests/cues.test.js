@@ -52,15 +52,25 @@ test('pause: off and unknown modes are never paused', () => {
   assert.equal(effectivePause('nope', D(2026, 1, 1), D(2026, 1, 2)), 'off');
   assert.equal(cuesPaused('off', 0, D(2026, 1, 10)), false);
 });
-test('pause: one week runs 7 local days from the day it was chosen', () => {
+test('pause: one week is a full week from the moment it was chosen', () => {
   const since = D(2026, 1, 10, 23);
-  assert.equal(effectivePause('week', since, D(2026, 1, 16, 23)), 'week'); // day 7
-  assert.equal(effectivePause('week', since, D(2026, 1, 17, 0)), 'off');   // day 8 starts
+  assert.equal(effectivePause('week', since, D(2026, 1, 17, 22)), 'week'); // 6 days 23 hours later
+  assert.equal(effectivePause('week', since, D(2026, 1, 17, 23)), 'off');  // exactly 7 days later
 });
-test('pause: one month runs 30 local days', () => {
+test('pause: one month is 30 calendar days', () => {
   const since = D(2026, 1, 10, 8);
-  assert.equal(effectivePause('month', since, D(2026, 2, 8, 22)), 'month');
-  assert.equal(effectivePause('month', since, D(2026, 2, 9, 0)), 'off');
+  assert.equal(effectivePause('month', since, D(2026, 2, 9, 7)), 'month');
+  assert.equal(effectivePause('month', since, D(2026, 2, 9, 8)), 'off');
+});
+test('pause: across a clock change the week still ends at the same clock time', () => {
+  const since = new Date(2026, 2, 24, 9, 0).getTime(); // UK clocks go forward on 29 March 2026
+  assert.equal(effectivePause('week', since, new Date(2026, 2, 31, 8, 59).getTime()), 'week');
+  assert.equal(effectivePause('week', since, new Date(2026, 2, 31, 9, 0).getTime()), 'off');
+});
+test('pause: a start time more than a day in the future is wrong, so it is not paused', () => {
+  const now = D(2026, 1, 10, 12);
+  assert.equal(effectivePause('week', now + 30 * 86400000, now), 'off');
+  assert.equal(effectivePause('week', now + 3600000, now), 'week'); // a small clock step back is fine
 });
 test('pause: until I turn it back on never ends', () => {
   assert.equal(effectivePause('until', 0, D(2030, 1, 1)), 'until');
@@ -68,4 +78,24 @@ test('pause: until I turn it back on never ends', () => {
 });
 test('pause: a timed pause with no start time is not paused', () => {
   assert.equal(effectivePause('week', 0, D(2026, 1, 10)), 'off');
+});
+
+import { applyPauseChoice } from '../src/cues.js';
+test('choice: picking a pause starts it now; picking off clears it', () => {
+  const now = D(2026, 1, 10, 12);
+  assert.deepEqual(applyPauseChoice({ cuesPause: 'off', cuesPauseAt: 0 }, 'week', now), { cuesPause: 'week', cuesPauseAt: now });
+  assert.deepEqual(applyPauseChoice({ cuesPause: 'week', cuesPauseAt: now - 1000 }, 'off', now), { cuesPause: 'off', cuesPauseAt: 0 });
+});
+test('choice: picking what is already in force keeps the start time', () => {
+  const now = D(2026, 1, 10, 12), at = now - 3 * 86400000;
+  assert.deepEqual(applyPauseChoice({ cuesPause: 'week', cuesPauseAt: at }, 'week', now), { cuesPause: 'week', cuesPauseAt: at });
+  assert.deepEqual(applyPauseChoice({ cuesPause: 'until', cuesPauseAt: at }, 'until', now), { cuesPause: 'until', cuesPauseAt: at });
+});
+test('choice: a stale radio after the pause ended starts a fresh pause only when the user picks it', () => {
+  const now = D(2026, 1, 20, 12), old = D(2026, 1, 1, 12);
+  assert.deepEqual(applyPauseChoice({ cuesPause: 'week', cuesPauseAt: old }, 'off', now), { cuesPause: 'week', cuesPauseAt: old }); // already off in effect: nothing changes
+  assert.deepEqual(applyPauseChoice({ cuesPause: 'week', cuesPauseAt: old }, 'month', now), { cuesPause: 'month', cuesPauseAt: now });
+});
+test('choice: a bad value means off', () => {
+  assert.deepEqual(applyPauseChoice({ cuesPause: 'until', cuesPauseAt: 5 }, 'forever', D(2026, 1, 1)), { cuesPause: 'off', cuesPauseAt: 0 });
 });

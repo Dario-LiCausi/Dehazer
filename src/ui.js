@@ -7,7 +7,7 @@ import { splitLines, MAX_PASTE } from './paste.js';
 import { loadSettings, saveSettings, applySettings } from './settings.js';
 import { whatsNewDue, markSeen } from './whatsnew.js';
 import { mountTools } from './tools-ui.js';
-import { pickCue, sameDay, effectivePause, cuesPaused } from './cues.js';
+import { pickCue, sameDay, effectivePause, cuesPaused, applyPauseChoice } from './cues.js';
 import { icon, mascot } from './icons.js';
 
 const MAX_FILE = 10 * 1024 * 1024; // bytes
@@ -47,7 +47,8 @@ export function mount(doc, store, env = {}) {
     const next = nextFive(items);
 
     // Cue card: at most one cue, same place. It is marked shown once per day, so the schedule moves on.
-    const paused = cuesPaused(settings.cuesPause, settings.cuesPauseAt, now());
+    const live = loadSettings(storage); // read again: another tab may have paused the cues
+    const paused = cuesPaused(live.cuesPause, live.cuesPauseAt, now());
     let cue = paused ? null : pickCue(items, now());
     if (cue && !(cue.shown && sameDay(cue.shown, now()))) { cue = await store.markCueShown(cue.id, now()); if (mine !== gen) return; } // null: another tab dropped it first
     $('cue-card').hidden = !cue;
@@ -226,13 +227,11 @@ export function mount(doc, store, env = {}) {
     fillSettings();
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
   });
-  sform.addEventListener('change', () => {
-    const next = { ...settings, backupNote: sform.elements.backupNote.checked };
-    for (const k of ['theme', 'size', 'font', 'look']) next[k] = sform.elements[k].value || settings[k];
-    const before = effectivePause(settings.cuesPause, settings.cuesPauseAt, now());
-    next.cuesPause = sform.elements.cuesPause.value || 'off';
-    if (next.cuesPause !== before) next.cuesPauseAt = next.cuesPause === 'off' ? 0 : now(); // the pause starts when it is chosen
-    else next.cuesPause = before;
+  sform.addEventListener('change', (e) => {
+    const base = loadSettings(storage); // start from what is stored: another tab may have changed it
+    const next = { ...base, backupNote: sform.elements.backupNote.checked };
+    for (const k of ['theme', 'size', 'font', 'look']) next[k] = sform.elements[k].value || base[k];
+    if (e.target && e.target.name === 'cuesPause') Object.assign(next, applyPauseChoice(base, e.target.value, now())); // the pause starts when it is chosen
     settings = next; saveSettings(storage, settings);
     if (win) applySettings(win, settings);
     render();
