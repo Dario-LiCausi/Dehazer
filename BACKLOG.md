@@ -3,7 +3,7 @@
 Not built yet. Ordered by when we think about them, not by promise.
 
 ## Next
-- Automated axe check in CI.
+- Automated axe check in CI. Partly covered since 2026-11-23 by tests/a11y.test.js (static checks, no dependency, runs in `npm test` and CI). A full axe run needs a new npm package: vet it first, owner OK.
 - Test with 5 ND adults for 14 days (M4).
 - Translations (a messages file per language).
 - DONE 2026-11-23 (v0.7): "Keep the old look for one release" switch is in Settings, Look ("Old warm look (v0.6)").
