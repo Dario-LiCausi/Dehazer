@@ -115,4 +115,4 @@ Object.assign(MSG, {
   lookV06: 'Old warm look (v0.6)',
   lookPlain: 'Plain',
 });
-MSG.newBody = 'New: a warmer look, and two kinds of memo: tasks and cues. Cues come back on days 1, 3, 7, 14 and 30, then monthly. Prefer the old look? Settings, Look, Plain.';
+MSG.newBody = 'New: warmer colours, calmer buttons and shorter words. Nothing moved. Every button is where it was. Prefer the old look? Settings, Look.';

@@ -7,13 +7,13 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 ## Two kinds of memo
 - **Task:** goes straight to the list. One task shows in the Now card. The next four wait in Up next.
 - **Cue:** something to remember, like a reason or a fact you like. One cue at a time shows in its own card. It comes back on days 1, 3, 7, 14 and 30, then every month. The only action is Drop, with 30 seconds to undo.
-- **Look:** a warm look with soft colours is the default. A Plain look with the older colours is in Settings. There is no motion and no sound in either look.
+- **Look:** Honey and pine is the default: oat page, ivory cards, pine buttons. The v0.6 warm look (kept for one release) and a Plain look are in Settings. There is no motion and no sound in any look.
 
 ## Screenshots
 ![Home on a wide screen: capture box, Now card, Up next, all items](docs/screens/home.png)
-![Phone width, light](docs/screens/phone.png)
+![Phone width, light (Honey and pine)](docs/screens/phone.png)
 ![Phone width, dark](docs/screens/dark.png)
-![Plain look: the older colours and shapes, no icons](docs/screens/plain.png)
+![Plain look: plain colours and shapes, no icons](docs/screens/plain.png)
 ![Settings: look, colours, text size, font, backup reminder](docs/screens/settings.png)
 ![Tools shelf in Settings: every tool is off until you turn it on](docs/screens/tools-shelf.png)
 ![Show this: a message in very large type](docs/screens/show-this.png)
