@@ -111,7 +111,7 @@ input[type="radio"], input[type="checkbox"] { width: 1.4rem; height: 1.4rem; acc
 :root:not([data-look="plain"]):not([data-look="v06"]) .next-card h2 .icon { color: var(--next-edge); }
 :root:not([data-look="plain"]):not([data-look="v06"]) .icon { width: 1.1em; height: 1.1em; }
 /* List rows: Done is a quiet tint, Not now is text only, so two buttons side by side never look the same. */
-:root:not([data-look="plain"]):not([data-look="v06"]) #items li .actions > button:nth-child(2) { background: transparent; border-color: transparent; color: var(--muted); }
+:root:not([data-look="plain"]):not([data-look="v06"]) #items li > .actions > button:nth-child(2) { background: transparent; border-color: transparent; color: var(--muted); }
 :root:not([data-look="plain"]):not([data-look="v06"]) details.more .actions button { background: transparent; }
 :root[data-look="v06"] .cue-card, :root[data-look="v06"] .now-card, :root[data-look="v06"] .next-card { border-left: var(--edge-w) solid var(--cue-edge); }
 :root[data-look="v06"] .now-card { border-left-color: var(--now-edge); }
