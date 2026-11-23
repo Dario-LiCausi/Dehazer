@@ -45,3 +45,27 @@ test('a cue shown yesterday is not kept today', () => {
   const a = cue('a', 1, { shown: D(2026, 1, 10, 9), due: D(2026, 1, 12, 0) });
   assert.equal(pickCue([a], now), null);
 });
+
+import { effectivePause, cuesPaused } from '../src/cues.js';
+test('pause: off and unknown modes are never paused', () => {
+  assert.equal(effectivePause('off', 0, D(2026, 1, 10)), 'off');
+  assert.equal(effectivePause('nope', D(2026, 1, 1), D(2026, 1, 2)), 'off');
+  assert.equal(cuesPaused('off', 0, D(2026, 1, 10)), false);
+});
+test('pause: one week runs 7 local days from the day it was chosen', () => {
+  const since = D(2026, 1, 10, 23);
+  assert.equal(effectivePause('week', since, D(2026, 1, 16, 23)), 'week'); // day 7
+  assert.equal(effectivePause('week', since, D(2026, 1, 17, 0)), 'off');   // day 8 starts
+});
+test('pause: one month runs 30 local days', () => {
+  const since = D(2026, 1, 10, 8);
+  assert.equal(effectivePause('month', since, D(2026, 2, 8, 22)), 'month');
+  assert.equal(effectivePause('month', since, D(2026, 2, 9, 0)), 'off');
+});
+test('pause: until I turn it back on never ends', () => {
+  assert.equal(effectivePause('until', 0, D(2030, 1, 1)), 'until');
+  assert.equal(cuesPaused('until', 0, D(2030, 1, 1)), true);
+});
+test('pause: a timed pause with no start time is not paused', () => {
+  assert.equal(effectivePause('week', 0, D(2026, 1, 10)), 'off');
+});

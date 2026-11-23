@@ -7,7 +7,7 @@ import { splitLines, MAX_PASTE } from './paste.js';
 import { loadSettings, saveSettings, applySettings } from './settings.js';
 import { whatsNewDue, markSeen } from './whatsnew.js';
 import { mountTools } from './tools-ui.js';
-import { pickCue, sameDay } from './cues.js';
+import { pickCue, sameDay, effectivePause, cuesPaused } from './cues.js';
 import { icon, mascot } from './icons.js';
 
 const MAX_FILE = 10 * 1024 * 1024; // bytes
@@ -47,7 +47,8 @@ export function mount(doc, store, env = {}) {
     const next = nextFive(items);
 
     // Cue card: at most one cue, same place. It is marked shown once per day, so the schedule moves on.
-    let cue = pickCue(items, now());
+    const paused = cuesPaused(settings.cuesPause, settings.cuesPauseAt, now());
+    let cue = paused ? null : pickCue(items, now());
     if (cue && !(cue.shown && sameDay(cue.shown, now()))) { cue = await store.markCueShown(cue.id, now()); if (mine !== gen) return; } // null: another tab dropped it first
     $('cue-card').hidden = !cue;
     $('cue-text').textContent = cue ? cue.text : '';
@@ -69,6 +70,7 @@ export function mount(doc, store, env = {}) {
     ul.replaceChildren(...shown.map((it, n) => row(it, n, shown.length)));
     empty.textContent = { active: MSG.nowEmpty, later: MSG.laterEmpty, done: MSG.doneEmpty, cue: MSG.cuesEmpty }[view];
     empty.hidden = shown.length > 0;
+    $('cues-paused').hidden = !(paused && view === 'cue');
     for (const b of doc.querySelectorAll('[data-view]')) {
       b.setAttribute('aria-pressed', String(b.dataset.view === view));
       if (b.dataset.view === 'later') b.textContent = `${MSG.viewLater} (${tasks.filter((i) => i.state === 'later').length})`; // quiet count, no badge, no colour
@@ -218,6 +220,7 @@ export function mount(doc, store, env = {}) {
       const r = sform.querySelector(`input[name="${k}"][value="${settings[k]}"]`); if (r) r.checked = true;
     }
     sform.elements.backupNote.checked = settings.backupNote;
+    const r = sform.querySelector(`input[name="cuesPause"][value="${effectivePause(settings.cuesPause, settings.cuesPauseAt, now())}"]`); if (r) r.checked = true;
   }
   $('open-settings').addEventListener('click', () => {
     fillSettings();
@@ -226,6 +229,10 @@ export function mount(doc, store, env = {}) {
   sform.addEventListener('change', () => {
     const next = { ...settings, backupNote: sform.elements.backupNote.checked };
     for (const k of ['theme', 'size', 'font', 'look']) next[k] = sform.elements[k].value || settings[k];
+    const before = effectivePause(settings.cuesPause, settings.cuesPauseAt, now());
+    next.cuesPause = sform.elements.cuesPause.value || 'off';
+    if (next.cuesPause !== before) next.cuesPauseAt = next.cuesPause === 'off' ? 0 : now(); // the pause starts when it is chosen
+    else next.cuesPause = before;
     settings = next; saveSettings(storage, settings);
     if (win) applySettings(win, settings);
     render();

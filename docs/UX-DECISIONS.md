@@ -59,7 +59,7 @@ Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, tr
 - **One action.** Drop, with 30 seconds to undo. Dropped cues stay in the Cues view with Back to list. No count of cues owed, no overdue state: a cue that is not shown today waits until the next open.
 - **Wording.** The card says "Remember" and shows the text. It describes, it does not command.
 - **Look.** Warm and friendly: Cue yellow, Now green, Up next blue, a 4 px coloured left edge, 16 px corners, small line icons and a small cloud mascot. Icons are decoration. Every card also has a text heading, so colour is never the only signal. No motion. A Plain look (v0.5 colours) is in Settings, Look.
-- **Not built yet:** Accept / Decline card for action memos, colour tags, pause all cues, return point tool. See BACKLOG.md.
+- **Not built yet:** Accept / Decline card for action memos, colour tags, return point tool. (Pause all cues was built in v0.8.) See BACKLOG.md.
 - **Known limits (cues).** With two tabs open at once, a cue can move to its next date in one tab while the other tab draws a different cue, or a cue dropped in one tab can leave the card empty until the next open. Nothing is lost. Export does not save the schedule: an imported cue starts again at day 1.
 
 ## v0.7: Honey and pine (colours, shapes, words; nothing moved)
@@ -73,3 +73,9 @@ What changed:
 Checks: a contrast test for every colour pair in light, dark, v0.6 and Plain, including button fills. A browser check at 390 px that the order of every button is the same as in v0.6.
 Sources: Krug, *Don't Make Me Think* (noise, cut words, goodwill); the *Psychology of Web Design* colour chapters (white reads as clinical; cream and brown read as warm); Filipiuk, *UI Design Principles* (warm greys, button levels, soft shadows); Every Layout and Müller-Brockmann, *Grid Systems* (one ratio, whole-line rhythm, unequal margins).
 Review: nd-review pass wanted before the next release. See [nd-review-v0.7.md](nd-review-v0.7.md).
+
+## v0.8: pause all cues
+Why: cues are useful on a good day and one more thing on a bad day. A user can switch them off for a while without losing them.
+What: Settings, Cues, three choices (1 week, 1 month, until you resume). While paused the Remember card is hidden and no cue is marked as shown, so the schedule waits. When the pause ends, due cues come back one at a time. The Cues list stays open and says that cues are paused.
+Nothing moved. The new choice sits in Settings and is off by default. The What changed note mentions it.
+Checks: pure-function tests for the pause length (7 and 30 local days), settings tests, and a real-browser run of pause, reload, expiry, until-resumed and resume.

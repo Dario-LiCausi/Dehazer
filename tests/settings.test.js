@@ -12,7 +12,7 @@ test('defaults hold calm, no reminders pushed', () => {
 });
 test('save then load round trip', () => {
   const s = mem(); saveSettings(s, { ...DEFAULTS, theme: 'dark', size: 'large', font: 'easy', backupNote: true });
-  assert.deepEqual(loadSettings(s), { theme: 'dark', size: 'large', font: 'easy', backupNote: true, look: 'warm' });
+  assert.deepEqual(loadSettings(s), { theme: 'dark', size: 'large', font: 'easy', backupNote: true, look: 'warm', cuesPause: 'off', cuesPauseAt: 0 });
 });
 test('bad stored values fall back to defaults', () => {
   const s = mem(); s.setItem('dehazer.settings', '{"theme":"pink","size":9,"font":"x","backupNote":"yes"}');
@@ -44,4 +44,13 @@ test('look defaults to warm; a bad value falls back', () => {
 test('the old warm look (v06) is kept for one release', () => {
   const s = mem(); s.setItem('dehazer.settings', '{"look":"v06"}');
   assert.equal(loadSettings(s).look, 'v06');
+});
+
+test('cue pause defaults to off; good values load, bad values fall back', () => {
+  assert.equal(DEFAULTS.cuesPause, 'off'); assert.equal(DEFAULTS.cuesPauseAt, 0);
+  const s = mem(); s.setItem('dehazer.settings', '{"cuesPause":"week","cuesPauseAt":1700000000000}');
+  assert.equal(loadSettings(s).cuesPause, 'week'); assert.equal(loadSettings(s).cuesPauseAt, 1700000000000);
+  s.setItem('dehazer.settings', '{"cuesPause":"forever","cuesPauseAt":"x"}');
+  assert.equal(loadSettings(s).cuesPause, 'off'); assert.equal(loadSettings(s).cuesPauseAt, 0);
+  s.setItem('dehazer.settings', '{"cuesPauseAt":-5}'); assert.equal(loadSettings(s).cuesPauseAt, 0);
 });

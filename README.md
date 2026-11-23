@@ -7,6 +7,7 @@ A free, open-source, local-first web app that helps ADHD and autistic adults **c
 ## Two kinds of memo
 - **Task:** goes straight to the list. One task shows in the Now card. The next four wait in Up next.
 - **Cue:** something to remember, like a reason or a fact you like. One cue at a time shows in its own card. It comes back on days 1, 3, 7, 14 and 30, then every month. The only action is Drop, with 30 seconds to undo.
+- **Pause cues:** Settings, Cues. Pause for 1 week, 1 month or until you resume. The Remember card stays hidden and your cues wait. They come back one at a time after the pause. Off by default.
 - **Look:** Honey and pine is the default: oat page, ivory cards, pine buttons. The v0.6 warm look (kept for one release) and a Plain look are in Settings. There is no motion and no sound in any look.
 
 ## Screenshots

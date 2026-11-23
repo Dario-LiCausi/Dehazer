@@ -115,4 +115,4 @@ Object.assign(MSG, {
   lookV06: 'Old warm look (v0.6)',
   lookPlain: 'Plain',
 });
-MSG.newBody = 'New: warmer colours, calmer buttons and shorter words. Nothing moved. Every button is where it was. Prefer the old look? Settings, Look.';
+MSG.newBody = 'New: warmer colours and shorter words, and you can pause cues in Settings. Nothing moved. Every button is where it was. Prefer the old look? Settings, Look.';

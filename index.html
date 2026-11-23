@@ -69,6 +69,7 @@
         <button type="button" data-view="done" aria-pressed="false">Done</button>
         <button type="button" data-view="cue" aria-pressed="false">Cues</button>
       </div>
+      <p id="cues-paused" class="hint" hidden>Cues are paused. Change this in Settings, under Cues.</p>
       <ul id="items" aria-label="Your list"></ul>
       <p id="empty">Empty for now. Add a thought above.</p>
     </section>
@@ -103,6 +104,13 @@
       <fieldset><legend>Font</legend>
         <label><input type="radio" name="font" value="system"> Device font</label>
         <label><input type="radio" name="font" value="easy"> Easy-read font</label>
+      </fieldset>
+      <fieldset><legend>Cues</legend>
+        <label><input type="radio" name="cuesPause" value="off"> Show cues</label>
+        <label><input type="radio" name="cuesPause" value="week"> Pause for 1 week</label>
+        <label><input type="radio" name="cuesPause" value="month"> Pause for 1 month</label>
+        <label><input type="radio" name="cuesPause" value="until"> Pause until I resume them</label>
+        <p class="hint">While paused, the Remember card stays hidden. Your cues wait. They come back one at a time after the pause.</p>
       </fieldset>
       <label class="row"><input type="checkbox" name="backupNote"> Remind me to export a copy (off by default)</label>
       <fieldset id="tools-set"><legend>Tools (all off until you turn one on)</legend></fieldset>

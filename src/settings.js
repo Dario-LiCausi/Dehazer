@@ -1,6 +1,6 @@
 // Settings live on this device only. Every value is checked on load. Defaults are calm.
-export const DEFAULTS = { theme: 'system', size: 'normal', font: 'easy', backupNote: false, look: 'warm' };
-const ALLOWED = { theme: ['system', 'light', 'dark'], size: ['normal', 'large', 'larger'], font: ['system', 'easy'], look: ['warm', 'v06', 'plain'] };
+export const DEFAULTS = { theme: 'system', size: 'normal', font: 'easy', backupNote: false, look: 'warm', cuesPause: 'off', cuesPauseAt: 0 };
+const ALLOWED = { theme: ['system', 'light', 'dark'], size: ['normal', 'large', 'larger'], font: ['system', 'easy'], look: ['warm', 'v06', 'plain'], cuesPause: ['off', 'week', 'month', 'until'] };
 const KEY = 'dehazer.settings';
 
 export function loadSettings(storage) {
@@ -9,6 +9,7 @@ export function loadSettings(storage) {
   const out = { ...DEFAULTS };
   for (const k of Object.keys(ALLOWED)) if (ALLOWED[k].includes(raw[k])) out[k] = raw[k];
   if (typeof raw.backupNote === 'boolean') out.backupNote = raw.backupNote;
+  if (Number.isFinite(raw.cuesPauseAt) && raw.cuesPauseAt >= 0) out.cuesPauseAt = raw.cuesPauseAt;
   return out;
 }
 export function saveSettings(storage, s) {

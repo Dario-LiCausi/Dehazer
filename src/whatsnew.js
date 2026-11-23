@@ -1,5 +1,5 @@
 // "What changed" note. Shown once after an update. A new user is never greeted by it.
-export const VERSION = '0.7.0';
+export const VERSION = '0.8.0';
 const KEY = 'dehazer.seenVersion';
 
 export function whatsNewDue(storage) {

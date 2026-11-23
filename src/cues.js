@@ -24,3 +24,17 @@ export function pickCue(items, now) {
   const due = cues.filter((i) => (i.due ?? 0) <= now).sort((a, b) => (a.due ?? 0) - (b.due ?? 0) || a.pos - b.pos);
   return due[0] ?? null;
 }
+
+// Pause all cues. mode: off | week | month | until (until the user turns it back on).
+// since = the time the pause was chosen. While paused no cue is picked and none is marked shown,
+// so the schedule waits. After the pause the due cues come back one at a time, as before.
+export const PAUSE_DAYS = { week: 7, month: 30 };
+export function effectivePause(mode, since, now) {
+  if (mode === 'until') return 'until';
+  const days = PAUSE_DAYS[mode];
+  if (!days || !since) return 'off';
+  const s = startOfDay(since);
+  const end = new Date(s.getFullYear(), s.getMonth(), s.getDate() + days).getTime();
+  return now < end ? mode : 'off';
+}
+export const cuesPaused = (mode, since, now) => effectivePause(mode, since, now) !== 'off';

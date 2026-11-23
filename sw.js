@@ -1,5 +1,5 @@
 // App shell cache. Network first for the page so updates arrive; cache when offline.
-const CACHE = 'dehazer-v0.7.0';
+const CACHE = 'dehazer-v0.8.0';
 const SHELL = ['./', 'index.html', 'icon.svg', 'manifest.webmanifest', 'src/tokens.css', 'src/app.css', 'src/main.js',
   'src/ui.js', 'src/store.js', 'src/messages.js', 'src/markdown.js', 'src/backup.js', 'src/idb-backend.js',
   'src/paste.js', 'src/settings.js', 'src/whatsnew.js', 'src/tools.js', 'src/cues.js', 'src/icons.js', 'src/tools-ui.js',

@@ -24,7 +24,7 @@ Not built yet. Ordered by when we think about them, not by promise.
 ## From v0.6 (memo kinds)
 - Action memo with an Accept / Decline card.
 - Colour tags.
-- Pause all cues for a while.
+- DONE 2026-11-23 (v0.8, m14-pause-cues): Pause all cues for a while (Settings, Cues: 1 week, 1 month or until resumed).
 - Return point tool.
 
 ## From v0.7 (Honey and pine)
