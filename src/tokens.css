@@ -1,27 +1,51 @@
-/* Design tokens. Change colours and sizes here only. Contrast is tested (tests/contrast.test.js). No pure red. */
+/* Design tokens. Change colours and sizes here only. Contrast is tested (tests/contrast.test.js). No pure red, no pure white, no pure black.
+   v0.7 "Honey and pine": warm oat page, ivory cards, walnut ink, pine buttons. Greys carry the walnut hue.
+   Spacing steps share one ratio of 1.5. Type steps share one ratio of 1.25. */
 :root {
-  /* Warm look (default). Card tints: Cue yellow, Now green, Up next blue. Edges are the 4 px left bar. */
+  --bg: #f5ead8; --card: #fcf6ec; --fg: #2b211b; --muted: #5f5248; --border: #8f7a66; --line: #e3d3ba;
+  --accent: #2f5a43; --accent-fg: #fcf6ec; --focus: #a4501c;
+  --cue-bg: #f6dd9c; --now-bg: #dfe7cc; --next-bg: #f2d9bf;
+  --cue-edge: #7a5a00; --now-edge: #2c6a3c; --next-edge: #8a4a1e; /* icon colours on the tints */
+  --edge-w: 0px; --card-w: 1px; --radius-btn: 14px;
+  --space-1: .44rem; --space-2: .67rem; --space-3: 1rem; --space-4: 1.5rem; --space-5: 2.25rem; --space-6: 3.375rem;
+  --text-s: .85rem; --text-m: 1.0625rem; --text-l: 1.33rem; --text-xl: 1.66rem;
+  --radius: 18px; --touch: 2.75rem; /* 44 px */
+  --shadow: 0 4px 16px rgb(43 33 27 / .08);
+  --fill: #e3d3ba; --lh: 1.5; --lh-h: 1.2; /* --fill is the button fill; the high-contrast rule never changes it */
+  --font: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --scale: 1;
+}
+:root[data-theme="dark"] {
+  --bg: #1f1a16; --card: #2a231e; --fg: #f2e9dd; --muted: #c4b8a8; --border: #9a8a78; --line: #443a31;
+  --accent: #8fcaa6; --accent-fg: #12281c; --focus: #f0a470;
+  --cue-bg: #3d3418; --now-bg: #26331f; --next-bg: #3d2d1f;
+  --cue-edge: #e6c25a; --now-edge: #9bd08a; --next-edge: #e8a470;
+  --shadow: none; --fill: #443a31;
+}
+:root[data-size="large"] { --scale: 1.15; }
+:root[data-size="larger"] { --scale: 1.3; }
+:root[data-font="system"] { --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+/* Old warm look (v0.6): kept for one release. Cool card tints, left bars, the v0.6 spacing and type steps. */
+:root[data-look="v06"][data-theme="light"] {
   --bg: #fbf2e6; --card: #ffffff; --fg: #26292e; --muted: #50565d; --border: #7d838a; --line: #e5d9c6;
   --accent: #1d6762; --accent-fg: #ffffff; --focus: #1a4fd6;
   --cue-bg: #fff3bf; --now-bg: #dcf1de; --next-bg: #e0ebf8;
   --cue-edge: #8f6a00; --now-edge: #2c7a38; --next-edge: #3a68a8;
-  --edge-w: 4px; --card-w: 1px; --radius-btn: 14px;
+  --edge-w: 4px; --radius: 16px; --shadow: none; --fill: #ffffff;
   --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem; --space-6: 2rem;
-  --text-s: .9375rem; --text-m: 1.0625rem; --text-l: 1.375rem; --text-xl: 1.75rem;
-  --radius: 16px; --touch: 2.75rem; /* 44 px */
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --scale: 1;
+  --text-s: .9375rem; --text-m: 1.0625rem; --text-l: 1.375rem; --text-xl: 1.75rem; --lh: 1.6; --lh-h: 1.6;
 }
-:root[data-theme="dark"] {
+:root[data-look="v06"][data-theme="dark"] {
   --fg: #f0ece6; --muted: #bdb6ad; --border: #8c8379;
   --accent: #7fcac3; --accent-fg: #10302d; --focus: #9db8ff;
   --bg: #1e1b18; --card: #2a2623; --line: #433d37;
   --cue-bg: #3b3417; --now-bg: #1f3a25; --next-bg: #1f3149;
   --cue-edge: #e0b83a; --now-edge: #6fc47b; --next-edge: #7fa8e0;
+  --edge-w: 4px; --radius: 16px; --shadow: none; --fill: #2a2623;
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem; --space-6: 2rem;
+  --text-s: .9375rem; --text-m: 1.0625rem; --text-l: 1.375rem; --text-xl: 1.75rem; --lh: 1.6; --lh-h: 1.6;
 }
-:root[data-size="large"] { --scale: 1.15; }
-:root[data-size="larger"] { --scale: 1.3; }
-:root[data-font="easy"] { --font: "Atkinson Hyperlegible", system-ui, sans-serif; }
 
 /* Plain look: the v0.5 colours and shapes. Tints become plain cards. */
 :root[data-look="plain"][data-theme="light"] {
@@ -29,12 +53,16 @@
   --accent: #2f5d62; --accent-fg: #ffffff; --focus: #1a4fd6;
   --cue-bg: #ffffff; --now-bg: #ffffff; --next-bg: #ffffff;
   --cue-edge: #7d838a; --now-edge: #7d838a; --next-edge: #7d838a;
-  --edge-w: 2px; --card-w: 2px; --radius: 10px; --radius-btn: 10px;
+  --edge-w: 2px; --card-w: 2px; --radius: 10px; --radius-btn: 10px; --shadow: none; --fill: #ffffff;
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem; --space-6: 2rem;
+  --text-s: .9375rem; --text-m: 1.0625rem; --text-l: 1.375rem; --text-xl: 1.75rem; --lh: 1.6; --lh-h: 1.6;
 }
 :root[data-look="plain"][data-theme="dark"] {
   --bg: #1b1e21; --card: #25292d; --fg: #ececec; --muted: #b3b8bd; --border: #7f868d; --line: #3a4046;
   --accent: #8fc1c6; --accent-fg: #14282a; --focus: #9db8ff;
   --cue-bg: #25292d; --now-bg: #25292d; --next-bg: #25292d;
   --cue-edge: #7f868d; --now-edge: #7f868d; --next-edge: #7f868d;
-  --edge-w: 2px; --card-w: 2px; --radius: 10px; --radius-btn: 10px;
+  --edge-w: 2px; --card-w: 2px; --radius: 10px; --radius-btn: 10px; --shadow: none; --fill: #25292d;
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem; --space-6: 2rem;
+  --text-s: .9375rem; --text-m: 1.0625rem; --text-l: 1.375rem; --text-xl: 1.75rem; --lh: 1.6; --lh-h: 1.6;
 }

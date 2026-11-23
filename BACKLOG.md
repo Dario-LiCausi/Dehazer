@@ -26,3 +26,8 @@ Not built yet. Ordered by when we think about them, not by promise.
 - Colour tags.
 - Pause all cues for a while.
 - Return point tool.
+
+## From v0.7 (Honey and pine)
+- Open an `nd-review` issue with docs/nd-review-v0.7.md and get one neurodivergent reviewer pass.
+- After one release, remove the "Old warm look (v0.6)" option.
+- Retake the Tools, Call panel, Doctor sheet and More screenshots in the new look.

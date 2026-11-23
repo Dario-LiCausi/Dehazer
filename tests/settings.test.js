@@ -8,7 +8,7 @@ const mem = () => { const m = new Map(); return { getItem: (k) => (m.has(k) ? m.
 test('defaults when nothing saved', () => { assert.deepEqual(loadSettings(mem()), DEFAULTS); });
 test('defaults hold calm, no reminders pushed', () => {
   assert.equal(DEFAULTS.theme, 'system'); assert.equal(DEFAULTS.size, 'normal');
-  assert.equal(DEFAULTS.font, 'system'); assert.equal(DEFAULTS.backupNote, false); // opt-in: a reminder can feel like nagging
+  assert.equal(DEFAULTS.font, 'easy'); assert.equal(DEFAULTS.backupNote, false); // opt-in: a reminder can feel like nagging
 });
 test('save then load round trip', () => {
   const s = mem(); saveSettings(s, { ...DEFAULTS, theme: 'dark', size: 'large', font: 'easy', backupNote: true });
@@ -39,4 +39,9 @@ test('look defaults to warm; a bad value falls back', () => {
   assert.equal(DEFAULTS.look, 'warm');
   const s = mem(); s.setItem('dehazer.settings', '{"look":"plain"}'); assert.equal(loadSettings(s).look, 'plain');
   s.setItem('dehazer.settings', '{"look":"neon"}'); assert.equal(loadSettings(s).look, 'warm');
+});
+
+test('the old warm look (v06) is kept for one release', () => {
+  const s = mem(); s.setItem('dehazer.settings', '{"look":"v06"}');
+  assert.equal(loadSettings(s).look, 'v06');
 });

@@ -3,31 +3,31 @@
 export const MSG = {
   saved: 'Saved.',
   later: 'Moved to later.',
-  done: 'Marked done.',
+  done: 'Done.',
   deleted: 'Deleted.',
   undo: 'Undo',
   restored: 'Back again.',
-  empty: 'Nothing here yet.',
+  empty: 'Empty for now. Add a thought above.',
   capturePlaceholder: 'What is on your mind?',
-  captureLabel: 'Capture a thought',
+  captureLabel: 'Add a thought',
   saveButton: 'Save',
-  storageFallback: 'Your browser cannot keep data here. Items vanish when you close this page.',
+  storageFallback: 'This browser cannot keep your items. They will be gone when you close this page.',
 };
 export const UNDO_MS = 30000;
 Object.assign(MSG, {
-  exported: 'Download started. Check your downloads.',
+  exported: 'Saved to your downloads.',
   exportButton: 'Export',
   importButton: 'Import',
-  importLabel: 'Import a Markdown file',
+  importLabel: 'Import a list',
   importDone: (n) => (n === 1 ? 'Added 1 item.' : `Added ${n} items.`),
   importNone: 'No items found in that file.',
   importTooBig: 'That file is too big to import. Nothing was added.',
   importStopped: 'Import stopped. Some items may have been added.',
-  importFailed: 'That file could not be read.',
+  importFailed: 'That file did not open. Nothing was added.',
   backupNote: 'It has been a while. You can save a copy with Export.',
   nextTitle: 'Next 5',
   nowLabel: 'Now',
-  nextEmpty: 'Nothing waiting. Capture a thought above.',
+  nextEmpty: 'Nothing waiting. Add a thought above.',
 });
 MSG.saveFailed = 'Could not save that. Your text is still in the box.';
 
@@ -42,7 +42,7 @@ Object.assign(MSG, {
   downButton: 'Move down',
   deleteButton: 'Delete',
   moreButton: 'More',
-  edited: 'Changed.',
+  edited: 'Updated.',
   movedUp: 'Moved up.',
   movedDown: 'Moved down.',
   broughtBack: 'Back on your list.',
@@ -50,7 +50,7 @@ Object.assign(MSG, {
   laterEmpty: 'Nothing waiting for later.',
   doneEmpty: 'Nothing done yet.',
   upNextTitle: 'Up next',
-  allTitle: 'All items',
+  allTitle: 'Your list',
   viewTodo: 'To do',
   viewLater: 'Later',
   viewDone: 'Done',
@@ -61,10 +61,10 @@ Object.assign(MSG, {
   closeButton: 'Close',
   themeLabel: 'Colours', themeSystem: 'Same as my device', themeLight: 'Light', themeDark: 'Dark',
   sizeLabel: 'Text size', sizeNormal: 'Normal', sizeLarge: 'Large', sizeLarger: 'Larger',
-  fontLabel: 'Font', fontSystem: 'Device font', fontEasy: 'Easy-read font',
-  motionNote: 'Motion is always off in Dehazer.',
+  fontLabel: 'Font', fontSystem: 'Device font', fontEasy: 'Easy-read font (default)',
+  motionNote: 'Motion is always off.',
   backupToggle: 'Remind me to export a copy (off by default)',
-  settingsSaved: 'Setting kept on this device.',
+  settingsSaved: 'Kept on this device.',
   newTitle: 'What changed',
   newBody: 'New in this version: a Now card, Edit, Move up and down, a Later list, Settings and a copy you can install. Your items are the same.',
   gotIt: 'Got it',
@@ -98,7 +98,7 @@ Object.assign(MSG, {
 
 // v0.6: warm look, task and cue memos.
 Object.assign(MSG, {
-  kindLabel: 'Kind',
+  kindLabel: 'Type',
   kindTask: 'Task',
   kindCue: 'Cue',
   saveTask: 'Save task',
@@ -111,7 +111,8 @@ Object.assign(MSG, {
   viewCues: 'Cues',
   cuesEmpty: 'No cues yet. Switch to Cue above to save one.',
   lookLabel: 'Look',
-  lookWarm: 'Warm',
+  lookWarm: 'Honey and pine',
+  lookV06: 'Old warm look (v0.6)',
   lookPlain: 'Plain',
 });
-MSG.newBody = 'New: a warmer look, and two kinds of memo: tasks and cues. Cues come back on days 1, 3, 7, 14 and 30, then monthly. Prefer the old look? Settings, Look, Plain.';
+MSG.newBody = 'New: warmer colours, calmer buttons and shorter words. Nothing moved. Every button is where it was. Prefer the old look? Settings, Look.';

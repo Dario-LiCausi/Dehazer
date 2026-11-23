@@ -18,7 +18,7 @@ One page. What is built, what waits, and why. Date: 2026-11-22. Sources: [RESEAR
 ## Where we did not follow the council
 - **Move up and down, paste and What changed:** the council said wait. We built them because each is small, tested and under a calm control. Watch them in the tests with real users (M4).
 - **Fixed slots for Done rows:** the council wanted a grey "Done" row to stay in place so nothing shifts. We did not build that. The Now card stays in one place and its text changes. An autistic tester must judge this first. It is the biggest open question.
-- **Easy-read font:** the one study we found (12 children) showed no gain. We call it a preference, never a fix. Default is the device font.
+- **Easy-read font:** the one study we found (12 children) showed no gain. We call it a preference, never a fix. Default since v0.7 is the easy-read font; the device font is one tap away in Settings.
 
 ## Backup reminder
 Off by default (opt-in). A reminder can feel like nagging. Export stays one tap away at the bottom.
@@ -61,3 +61,15 @@ Paste preview ("Add 12 items?"), axe check in CI, keep-the-old-layout switch, tr
 - **Look.** Warm and friendly: Cue yellow, Now green, Up next blue, a 4 px coloured left edge, 16 px corners, small line icons and a small cloud mascot. Icons are decoration. Every card also has a text heading, so colour is never the only signal. No motion. A Plain look (v0.5 colours) is in Settings, Look.
 - **Not built yet:** Accept / Decline card for action memos, colour tags, pause all cues, return point tool. See BACKLOG.md.
 - **Known limits (cues).** With two tabs open at once, a cue can move to its next date in one tab while the other tab draws a different cue, or a cue dropped in one tab can leave the card empty until the next open. Nothing is lost. Export does not save the schedule: an imported cue starts again at day 1.
+
+## v0.7: Honey and pine (colours, shapes, words; nothing moved)
+Why: a user said the app felt cold and clinical. Pure white cards, blue-grey borders and a cold blue card looked like a clinic form.
+What changed:
+- Colours: oat page `#f5ead8`, ivory cards `#fcf6ec`, walnut text `#2b211b`, pine buttons `#2f5a43`. No pure white or black. Greys carry the walnut hue. The "Up next" card is apricot, not blue.
+- Shapes: soft tint cards without a left bar, one soft shadow, one radius family. Done is a quiet tint button. Not now is plain text, so two buttons side by side never look the same.
+- Type: Atkinson Hyperlegible is the default font. Four sizes on one ratio of 1.25. Spacing steps share one ratio of 1.5. Top and bottom page padding is larger than the sides.
+- Words: shorter and kinder. "Capture a thought" is now "Add a thought". "All items" is "Your list". "Marked done." is "Done."
+- Kept: every button position, list order, main button text, motion off. The v0.6 look stays in Settings for one release.
+Checks: a contrast test for every colour pair in light, dark, v0.6 and Plain, including button fills. A browser check at 390 px that the order of every button is the same as in v0.6.
+Sources: Krug, *Don't Make Me Think* (noise, cut words, goodwill); the *Psychology of Web Design* colour chapters (white reads as clinical; cream and brown read as warm); Filipiuk, *UI Design Principles* (warm greys, button levels, soft shadows); Every Layout and Müller-Brockmann, *Grid Systems* (one ratio, whole-line rhythm, unequal margins).
+Review: nd-review pass wanted before the next release. See [nd-review-v0.7.md](nd-review-v0.7.md).
